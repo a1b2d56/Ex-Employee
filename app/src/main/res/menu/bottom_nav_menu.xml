@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <item android:id="@+id/homeFragment"         android:icon="@drawable/ic_nav_home"         android:title="@string/title_home"/>
+    <item android:id="@+id/noticeboardFragment"  android:icon="@drawable/ic_nav_noticeboard"  android:title="@string/title_noticeboard"/>
+    <item android:id="@+id/dependantsFragment"   android:icon="@drawable/ic_nav_dependants"   android:title="@string/title_dependants"/>
+    <item android:id="@+id/livelinessFragment"   android:icon="@drawable/ic_nav_liveliness"   android:title="@string/title_liveliness"/>
+    <item android:id="@+id/verificationFragment" android:icon="@drawable/ic_nav_verification" android:title="@string/title_verification"/>
+</menu>

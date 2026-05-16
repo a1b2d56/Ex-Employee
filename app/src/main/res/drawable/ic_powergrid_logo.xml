@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Placeholder launcher foreground — PowerGrid transmission tower motif -->
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="108dp"
+    android:height="108dp"
+    android:viewportWidth="108"
+    android:viewportHeight="108">
+
+    <!-- Tower body -->
+    <path
+        android:fillColor="#FFFFFF"
+        android:pathData="M54,24 L60,50 L66,80 L72,80 L60,24 Z" />
+    <path
+        android:fillColor="#FFFFFF"
+        android:pathData="M54,24 L48,50 L42,80 L36,80 L48,24 Z" />
+
+    <!-- Cross arms -->
+    <path
+        android:fillColor="#FFFFFF"
+        android:pathData="M38,42 L70,42 L68,38 L40,38 Z" />
+    <path
+        android:fillColor="#FFFFFF"
+        android:pathData="M42,56 L66,56 L65,52 L43,52 Z" />
+
+    <!-- Power lines (left) -->
+    <path
+        android:strokeColor="#E87722"
+        android:strokeWidth="1.5"
+        android:pathData="M38,40 Q28,36 22,38" />
+    <path
+        android:strokeColor="#E87722"
+        android:strokeWidth="1.5"
+        android:pathData="M42,54 Q32,50 26,52" />
+
+    <!-- Power lines (right) -->
+    <path
+        android:strokeColor="#E87722"
+        android:strokeWidth="1.5"
+        android:pathData="M70,40 Q80,36 86,38" />
+    <path
+        android:strokeColor="#E87722"
+        android:strokeWidth="1.5"
+        android:pathData="M66,54 Q76,50 82,52" />
+
+    <!-- Base -->
+    <path
+        android:fillColor="#FFFFFF"
+        android:pathData="M34,80 L74,80 L72,76 L36,76 Z" />
+</vector>

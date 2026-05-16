@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent" android:layout_height="match_parent"
+    android:background="?attr/colorSurface" android:fillViewport="true">
+    <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content"
+        android:orientation="vertical" android:padding="@dimen/screen_padding">
+
+        <com.google.android.material.card.MaterialCardView android:layout_width="match_parent"
+            android:layout_height="wrap_content" android:layout_marginBottom="16dp"
+            app:cardCornerRadius="@dimen/card_corner_radius" app:cardBackgroundColor="?attr/colorSurfaceVariant" app:cardElevation="0dp">
+            <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content"
+                android:orientation="vertical" android:padding="16dp">
+                <TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
+                    android:text="Dependant Liveliness Check"
+                    android:textAppearance="?attr/textAppearanceTitleMedium"
+                    android:textColor="?attr/colorOnSurface" android:layout_marginBottom="8dp"/>
+                <TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
+                    android:text="@string/liveliness_instructions"
+                    android:textAppearance="?attr/textAppearanceBodyMedium"
+                    android:textColor="?attr/colorOnSurfaceVariant" android:lineSpacingMultiplier="1.4"/>
+            </LinearLayout>
+        </com.google.android.material.card.MaterialCardView>
+
+        <com.google.android.material.card.MaterialCardView android:layout_width="match_parent"
+            android:layout_height="200dp" android:layout_marginBottom="16dp"
+            app:cardCornerRadius="@dimen/card_corner_radius" app:strokeColor="?attr/colorOutline"
+            app:strokeWidth="1dp" app:cardElevation="0dp">
+            <FrameLayout android:layout_width="match_parent" android:layout_height="match_parent">
+                <ImageView android:id="@+id/ivCapturedPhoto" android:layout_width="match_parent"
+                    android:layout_height="match_parent" android:scaleType="centerCrop"
+                    android:src="@drawable/ic_person_placeholder" android:alpha="0.3"
+                    android:contentDescription="Captured photo"/>
+                <TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
+                    android:layout_gravity="bottom|center_horizontal" android:layout_marginBottom="12dp"
+                    android:text="Photo will appear here" android:textAppearance="?attr/textAppearanceLabelMedium"
+                    android:textColor="?attr/colorOnSurfaceVariant"/>
+            </FrameLayout>
+        </com.google.android.material.card.MaterialCardView>
+
+        <com.google.android.material.button.MaterialButton android:id="@+id/btnCapturePhoto"
+            style="@style/Widget.Material3.Button.TonalButton" android:layout_width="match_parent"
+            android:layout_height="@dimen/btn_height" android:text="@string/btn_capture_photo"
+            android:layout_marginBottom="12dp" android:textSize="15sp"/>
+
+        <com.google.android.material.progressindicator.LinearProgressIndicator
+            android:id="@+id/progress" android:layout_width="match_parent"
+            android:layout_height="wrap_content" android:indeterminate="true"
+            android:visibility="gone" android:layout_marginBottom="8dp"/>
+
+        <com.google.android.material.button.MaterialButton android:id="@+id/btnSubmitLiveliness"
+            style="@style/Widget.Material3.Button" android:layout_width="match_parent"
+            android:layout_height="@dimen/btn_height" android:text="@string/btn_submit_liveliness" android:textSize="15sp"/>
+    </LinearLayout>
+</ScrollView>

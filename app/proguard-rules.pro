@@ -1,0 +1,4 @@
+-keep class com.powergrid.exemployee.data.remote.model.** { *; }
+-keep class com.powergrid.exemployee.domain.model.** { *; }
+-keepattributes *Annotation*, Signature
+-dontwarn okhttp3.**, retrofit2.**

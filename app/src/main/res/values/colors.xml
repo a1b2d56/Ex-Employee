@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Light theme — PowerGrid deep blue + orange accent -->
+    <color name="md_theme_primary">#005EB8</color>
+    <color name="md_theme_onPrimary">#FFFFFF</color>
+    <color name="md_theme_primaryContainer">#D6E4FF</color>
+    <color name="md_theme_onPrimaryContainer">#001B47</color>
+    <color name="md_theme_secondary">#E87722</color>
+    <color name="md_theme_onSecondary">#FFFFFF</color>
+    <color name="md_theme_tertiary">#006E2C</color>
+    <color name="md_theme_surface">#FAFCFF</color>
+    <color name="md_theme_onSurface">#1A1C1E</color>
+    <color name="md_theme_surfaceVariant">#DEE3EB</color>
+    <color name="md_theme_error">#BA1A1A</color>
+    <!-- Dark theme -->
+    <color name="md_theme_dark_primary">#A8C8FF</color>
+    <color name="md_theme_dark_onPrimary">#003072</color>
+    <color name="md_theme_dark_primaryContainer">#00469E</color>
+    <color name="md_theme_dark_onPrimaryContainer">#D6E4FF</color>
+    <color name="md_theme_dark_secondary">#FFB77A</color>
+    <color name="md_theme_dark_onSecondary">#4B2500</color>
+    <color name="md_theme_dark_tertiary">#72BE80</color>
+    <color name="md_theme_dark_surface">#111418</color>
+    <color name="md_theme_dark_onSurface">#E2E2E6</color>
+    <color name="md_theme_dark_surfaceVariant">#42474E</color>
+    <color name="md_theme_dark_error">#FFB4AB</color>
+    <!-- Status chip colours -->
+    <color name="status_active">#C8F5D1</color>
+    <color name="status_inactive">#FFE0E0</color>
+    <color name="status_verified">#C8F5D1</color>
+    <color name="status_rejected">#FFE0E0</color>
+    <color name="status_pending">#FFF3CC</color>
+</resources>

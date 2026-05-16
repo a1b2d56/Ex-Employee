@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">Ex-Employee</string>
+    <string name="hint_username">Employee ID / Username</string>
+    <string name="hint_password">Password</string>
+    <string name="hint_captcha">Enter answer</string>
+    <string name="hint_otp">Enter OTP</string>
+    <string name="btn_login">Sign In</string>
+    <string name="btn_send_otp">Send OTP</string>
+    <string name="btn_verify_otp">Verify OTP</string>
+    <string name="btn_refresh_captcha">Refresh</string>
+    <string name="label_captcha">Security Check</string>
+    <string name="btn_biometric">Use Biometrics</string>
+    <string name="btn_dev_bypass">⚠ Dev Bypass (Remove before release)</string>
+    <string name="title_home">My Profile</string>
+    <string name="title_noticeboard">Noticeboard</string>
+    <string name="title_dependants">Dependants</string>
+    <string name="title_liveliness">Dependant Liveliness</string>
+    <string name="title_verification">Verification</string>
+    <string name="font_size_s">S</string>
+    <string name="font_size_m">M</string>
+    <string name="font_size_l">L</string>
+    <string name="font_size_xl">XL</string>
+    <string name="font_bold">B</string>
+    <string name="btn_capture_photo">📷  Capture Photo</string>
+    <string name="btn_submit_liveliness">Submit Liveliness</string>
+    <string name="liveliness_instructions">Please capture a clear, well-lit photograph of yourself and submit to confirm liveliness of your registered dependants.</string>
+</resources>
