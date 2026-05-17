@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+    <item android:id="@+id/action_font_size"
+        android:icon="@drawable/ic_font_size"
+        android:title="@string/action_font_size"
+        app:showAsAction="always"/>
+    <item android:id="@+id/action_bold"
+        android:icon="@drawable/ic_format_bold"
+        android:title="@string/action_bold"
+        app:showAsAction="always"/>
+</menu>

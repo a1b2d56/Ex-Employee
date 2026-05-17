@@ -17,6 +17,10 @@
     <string name="title_dependants">Dependants</string>
     <string name="title_liveliness">Dependant Liveliness</string>
     <string name="title_verification">Verification</string>
+    <string name="title_more">Menu</string>
+    <string name="drawer_subtitle">Power Grid Corporation of India</string>
+    <string name="action_font_size">Font Size</string>
+    <string name="action_bold">Bold</string>
     <string name="font_size_s">S</string>
     <string name="font_size_m">M</string>
     <string name="font_size_l">L</string>
