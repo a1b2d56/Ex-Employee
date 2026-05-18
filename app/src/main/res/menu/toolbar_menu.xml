@@ -4,9 +4,11 @@
     <item android:id="@+id/action_font_size"
         android:icon="@drawable/ic_font_size"
         android:title="@string/action_font_size"
-        app:showAsAction="always"/>
+        app:showAsAction="always"
+        app:iconTint="?attr/colorOnSurface"/>
     <item android:id="@+id/action_bold"
         android:icon="@drawable/ic_format_bold"
         android:title="@string/action_bold"
-        app:showAsAction="always"/>
+        app:showAsAction="always"
+        app:iconTint="?attr/colorOnSurface"/>
 </menu>

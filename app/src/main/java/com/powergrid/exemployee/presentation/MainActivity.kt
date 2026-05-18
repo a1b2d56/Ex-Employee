@@ -26,12 +26,19 @@ class MainActivity : BaseActivity() {
         const val EXTRA_TOKEN = "auth_token"
         val FONT_SCALES = floatArrayOf(0.85f, 1.0f, 1.15f, 1.30f)
         val FONT_LABELS = arrayOf("S", "M", "L", "XL")
+
+        // Destinations where the font/bold toolbar buttons should be hidden
+        private val HIDE_FONT_BUTTONS = setOf(
+            R.id.settingsFragment,
+            R.id.aboutFragment
+        )
     }
 
     private lateinit var binding: ActivityMainBinding
     private lateinit var navController: NavController
     private lateinit var appBarConfig: AppBarConfiguration
     var authToken: String = ""
+    private var toolbarMenu: Menu? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -43,23 +50,42 @@ class MainActivity : BaseActivity() {
         val host = supportFragmentManager.findFragmentById(R.id.nav_host_fragment) as NavHostFragment
         navController = host.navController
 
-        // Top-level destinations: bottom nav tabs (not the drawer item)
+        // Top-level destinations (no back arrow)
         appBarConfig = AppBarConfiguration(setOf(
             R.id.homeFragment, R.id.noticeboardFragment,
             R.id.dependantsFragment, R.id.livelinessFragment
         ))
         setupActionBarWithNavController(navController, appBarConfig)
 
-        // Wire only the real nav destinations (not the "More" toggle)
+        // Wire only the real nav destinations (not the "Menu" toggle)
         binding.bottomNav.setupWithNavController(navController)
 
-        // Intercept the "More" hamburger tap to open the drawer instead of navigating
+        // Hide/show toolbar font buttons and deselect bottom nav on drawer-only screens
+        val bottomNavIds = setOf(
+            R.id.homeFragment, R.id.noticeboardFragment,
+            R.id.dependantsFragment, R.id.livelinessFragment
+        )
+        navController.addOnDestinationChangedListener { _, destination, _ ->
+            val show = destination.id !in HIDE_FONT_BUTTONS
+            toolbarMenu?.findItem(R.id.action_font_size)?.isVisible = show
+            toolbarMenu?.findItem(R.id.action_bold)?.isVisible = show
+
+            // Deselect all bottom nav items when on a drawer-only destination
+            if (destination.id !in bottomNavIds) {
+                binding.bottomNav.menu.setGroupCheckable(0, true, false)
+                for (i in 0 until binding.bottomNav.menu.size()) {
+                    binding.bottomNav.menu.getItem(i).isChecked = false
+                }
+                binding.bottomNav.menu.setGroupCheckable(0, true, true)
+            }
+        }
+
+        // Intercept the "Menu" hamburger tap to open the drawer from the right
         binding.bottomNav.setOnItemSelectedListener { item ->
             if (item.itemId == R.id.nav_drawer_toggle) {
-                binding.drawerLayout.openDrawer(GravityCompat.START)
-                false // don't select this item
+                binding.drawerLayout.openDrawer(GravityCompat.END)
+                false
             } else {
-                // Default nav behaviour
                 val handled = navController.popBackStack(item.itemId, false)
                 if (!handled) {
                     navController.navigate(item.itemId)
@@ -70,10 +96,12 @@ class MainActivity : BaseActivity() {
 
         // Drawer item clicks → navigate then close drawer
         binding.navDrawer.setNavigationItemSelectedListener { item ->
-            binding.drawerLayout.closeDrawer(GravityCompat.START)
+            binding.drawerLayout.closeDrawer(GravityCompat.END)
             when (item.itemId) {
-                R.id.verificationFragment -> {
-                    navController.navigate(R.id.verificationFragment)
+                R.id.homeFragment, R.id.noticeboardFragment,
+                R.id.dependantsFragment, R.id.livelinessFragment,
+                R.id.verificationFragment, R.id.settingsFragment, R.id.aboutFragment -> {
+                    navController.navigate(item.itemId)
                     true
                 }
                 else -> false
@@ -83,19 +111,21 @@ class MainActivity : BaseActivity() {
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
         menuInflater.inflate(R.menu.toolbar_menu, menu)
+        toolbarMenu = menu
+
+        // Apply initial visibility based on current destination
+        val currentDest = navController.currentDestination?.id
+        val show = currentDest !in HIDE_FONT_BUTTONS
+        menu.findItem(R.id.action_font_size)?.isVisible = show
+        menu.findItem(R.id.action_bold)?.isVisible = show
+
         return true
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         return when (item.itemId) {
-            R.id.action_font_size -> {
-                cycleFontSize()
-                true
-            }
-            R.id.action_bold -> {
-                toggleBold()
-                true
-            }
+            R.id.action_font_size -> { cycleFontSize(); true }
+            R.id.action_bold      -> { toggleBold(); true }
             else -> super.onOptionsItemSelected(item)
         }
     }
@@ -120,8 +150,8 @@ class MainActivity : BaseActivity() {
 
     @Suppress("DEPRECATION")
     override fun onBackPressed() {
-        if (binding.drawerLayout.isDrawerOpen(GravityCompat.START)) {
-            binding.drawerLayout.closeDrawer(GravityCompat.START)
+        if (binding.drawerLayout.isDrawerOpen(GravityCompat.END)) {
+            binding.drawerLayout.closeDrawer(GravityCompat.END)
         } else {
             super.onBackPressed()
         }

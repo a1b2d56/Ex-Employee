@@ -8,15 +8,22 @@
 
     <androidx.coordinatorlayout.widget.CoordinatorLayout
         android:layout_width="match_parent" android:layout_height="match_parent"
-        android:background="?attr/colorSurface">
+        android:background="?attr/colorSurfaceContainerLow">
 
         <com.google.android.material.appbar.AppBarLayout
             android:id="@+id/appBarLayout" android:layout_width="match_parent"
-            android:layout_height="wrap_content">
+            android:layout_height="wrap_content"
+            android:background="@android:color/transparent"
+            app:elevation="0dp"
+            app:liftOnScroll="false">
 
             <com.google.android.material.appbar.MaterialToolbar
                 android:id="@+id/toolbar" android:layout_width="match_parent"
-                android:layout_height="?attr/actionBarSize"/>
+                android:layout_height="?attr/actionBarSize"
+                app:titleCentered="true"
+                app:titleTextColor="?attr/colorOnSurface"
+                app:navigationIconTint="?attr/colorOnSurface"
+                app:menu="@menu/toolbar_menu"/>
         </com.google.android.material.appbar.AppBarLayout>
 
         <androidx.fragment.app.FragmentContainerView android:id="@+id/nav_host_fragment"
@@ -37,8 +44,12 @@
     <com.google.android.material.navigation.NavigationView
         android:id="@+id/navDrawer"
         android:layout_width="wrap_content" android:layout_height="match_parent"
-        android:layout_gravity="start"
+        android:layout_gravity="end"
         android:fitsSystemWindows="true"
         app:menu="@menu/drawer_menu"
-        app:headerLayout="@layout/nav_drawer_header"/>
+        app:headerLayout="@layout/nav_drawer_header"
+        app:dividerColor="?attr/colorOutlineVariant"
+        app:dividerThickness="0.5dp"
+        app:dividerInsetStart="74dp"
+        app:dividerInsetEnd="16dp"/>
 </androidx.drawerlayout.widget.DrawerLayout>
