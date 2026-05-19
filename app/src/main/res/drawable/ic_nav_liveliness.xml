@@ -1,6 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
+<!-- Material Symbols Rounded: Monitor Heart (filled) — perfect for liveliness/health check -->
 <vector xmlns:android="http://schemas.android.com/apk/res/android"
     android:width="24dp" android:height="24dp"
-    android:viewportWidth="24" android:viewportHeight="24">
-    <path android:fillColor="@android:color/black" android:pathData="M12,21.35l-1.45,-1.32C5.4,15.36 2,12.28 2,8.5 2,5.42 4.42,3 7.5,3c1.74,0 3.41,0.81 4.5,2.09C13.09,3.81 14.76,3 16.5,3 19.58,3 22,5.42 22,8.5c0,3.78 -3.4,6.86 -8.55,11.54L12,21.35z"/>
+    android:viewportWidth="960" android:viewportHeight="960">
+    <path android:fillColor="@android:color/black"
+        android:pathData="M360,560l80,-120l80,80l56,-80l104,0l0,-200q0,-33 -23.5,-56.5T600,160l-240,0q-33,0 -56.5,23.5T280,240l0,200l24,0l56,120ZM160,800q-33,0 -56.5,-23.5T80,720l0,-240l160,0l80,160l80,-120l80,80l120,-160l160,0l80,0l0,280q0,33 -23.5,56.5T760,800l-600,0Z"/>
 </vector>

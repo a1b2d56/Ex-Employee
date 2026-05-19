@@ -12,6 +12,7 @@ abstract class BaseActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         applyThemeOverlay()
         super.onCreate(savedInstanceState)
+        androidx.core.view.WindowCompat.setDecorFitsSystemWindows(window, false)
     }
 
     override fun attachBaseContext(newBase: Context) {

@@ -15,9 +15,20 @@ class LivelinessViewModel @Inject constructor() : ViewModel() {
     private val _submitState = MutableStateFlow<UiState<String>>(UiState.Idle)
     val submitState: StateFlow<UiState<String>> = _submitState
 
+    private var capturedPhoto: android.graphics.Bitmap? = null
+
+    fun setCapturedPhoto(bitmap: android.graphics.Bitmap) {
+        capturedPhoto = bitmap
+    }
+
     fun submit(token: String) = viewModelScope.launch {
+        if (capturedPhoto == null) {
+            _submitState.value = UiState.Error("Please capture a photo first")
+            return@launch
+        }
         _submitState.value = UiState.Loading
-        delay(1500) // TODO: Replace with actual API call sending photo + token
+        // TODO: Send capturedPhoto + token to actual API endpoint using MultipartBody
+        delay(1500) 
         _submitState.value = UiState.Success("Liveliness recorded. Ref: LVL-${System.currentTimeMillis()}")
     }
 

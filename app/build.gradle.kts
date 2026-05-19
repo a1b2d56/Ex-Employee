@@ -103,4 +103,10 @@ dependencies {
 
     // Image loading — Coil (Apache 2.0)
     implementation("io.coil-kt:coil:2.7.0")
+
+    // CameraX — Apache 2.0
+    val cameraxVersion = "1.3.3"
+    implementation("androidx.camera:camera-camera2:$cameraxVersion")
+    implementation("androidx.camera:camera-lifecycle:$cameraxVersion")
+    implementation("androidx.camera:camera-view:$cameraxVersion")
 }

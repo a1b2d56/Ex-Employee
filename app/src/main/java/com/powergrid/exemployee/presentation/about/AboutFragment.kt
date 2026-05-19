@@ -4,7 +4,6 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import com.powergrid.exemployee.BuildConfig
 import com.powergrid.exemployee.common.BaseFragment
 import com.powergrid.exemployee.databinding.FragmentAboutBinding
 import dagger.hilt.android.AndroidEntryPoint
@@ -22,7 +21,15 @@ class AboutFragment : BaseFragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        binding.tvVersion.text = "Version ${BuildConfig.VERSION_NAME} (${BuildConfig.VERSION_CODE})"
+        val packageInfo = requireContext().packageManager.getPackageInfo(requireContext().packageName, 0)
+        val versionName = packageInfo.versionName ?: "Unknown"
+        val versionCode = if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.P) {
+            packageInfo.longVersionCode
+        } else {
+            @Suppress("DEPRECATION")
+            packageInfo.versionCode.toLong()
+        }
+        binding.tvVersion.text = "Version $versionName ($versionCode)"
     }
 
     override fun onDestroyView() {

@@ -13,6 +13,8 @@ import androidx.navigation.ui.AppBarConfiguration
 import androidx.navigation.ui.navigateUp
 import androidx.navigation.ui.setupActionBarWithNavController
 import androidx.navigation.ui.setupWithNavController
+import androidx.core.view.ViewCompat
+import androidx.core.view.WindowInsetsCompat
 import com.powergrid.exemployee.R
 import com.powergrid.exemployee.common.BaseActivity
 import com.powergrid.exemployee.common.FontPrefs
@@ -52,54 +54,33 @@ class MainActivity : BaseActivity() {
 
         // Top-level destinations (no back arrow)
         appBarConfig = AppBarConfiguration(setOf(
-            R.id.homeFragment, R.id.noticeboardFragment,
-            R.id.dependantsFragment, R.id.livelinessFragment
+            R.id.mainTabsFragment
         ))
         setupActionBarWithNavController(navController, appBarConfig)
 
-        // Wire only the real nav destinations (not the "Menu" toggle)
-        binding.bottomNav.setupWithNavController(navController)
+        // Apply edge-to-edge window insets to AppBarLayout
+        ViewCompat.setOnApplyWindowInsetsListener(binding.appBarLayout) { v, insets ->
+            val sysBars = insets.getInsets(WindowInsetsCompat.Type.systemBars())
+            v.setPadding(0, sysBars.top, 0, 0)
+            insets
+        }
 
         // Hide/show toolbar font buttons and deselect bottom nav on drawer-only screens
-        val bottomNavIds = setOf(
-            R.id.homeFragment, R.id.noticeboardFragment,
-            R.id.dependantsFragment, R.id.livelinessFragment
-        )
+        // Hide/show toolbar font buttons
         navController.addOnDestinationChangedListener { _, destination, _ ->
             val show = destination.id !in HIDE_FONT_BUTTONS
             toolbarMenu?.findItem(R.id.action_font_size)?.isVisible = show
             toolbarMenu?.findItem(R.id.action_bold)?.isVisible = show
-
-            // Deselect all bottom nav items when on a drawer-only destination
-            if (destination.id !in bottomNavIds) {
-                binding.bottomNav.menu.setGroupCheckable(0, true, false)
-                for (i in 0 until binding.bottomNav.menu.size()) {
-                    binding.bottomNav.menu.getItem(i).isChecked = false
-                }
-                binding.bottomNav.menu.setGroupCheckable(0, true, true)
-            }
-        }
-
-        // Intercept the "Menu" hamburger tap to open the drawer from the right
-        binding.bottomNav.setOnItemSelectedListener { item ->
-            if (item.itemId == R.id.nav_drawer_toggle) {
-                binding.drawerLayout.openDrawer(GravityCompat.END)
-                false
-            } else {
-                val handled = navController.popBackStack(item.itemId, false)
-                if (!handled) {
-                    navController.navigate(item.itemId)
-                }
-                true
-            }
         }
 
         // Drawer item clicks → navigate then close drawer
         binding.navDrawer.setNavigationItemSelectedListener { item ->
             binding.drawerLayout.closeDrawer(GravityCompat.END)
             when (item.itemId) {
-                R.id.homeFragment, R.id.noticeboardFragment,
-                R.id.dependantsFragment, R.id.livelinessFragment,
+                R.id.homeFragment -> { switchToTab(0); true }
+                R.id.noticeboardFragment -> { switchToTab(1); true }
+                R.id.dependantsFragment -> { switchToTab(2); true }
+                R.id.livelinessFragment -> { switchToTab(3); true }
                 R.id.verificationFragment, R.id.settingsFragment, R.id.aboutFragment -> {
                     navController.navigate(item.itemId)
                     true
@@ -107,6 +88,19 @@ class MainActivity : BaseActivity() {
                 else -> false
             }
         }
+
+        // Modern back press handling (replaces deprecated onBackPressed)
+        onBackPressedDispatcher.addCallback(this, object : androidx.activity.OnBackPressedCallback(true) {
+            override fun handleOnBackPressed() {
+                if (binding.drawerLayout.isDrawerOpen(GravityCompat.END)) {
+                    binding.drawerLayout.closeDrawer(GravityCompat.END)
+                } else {
+                    isEnabled = false
+                    onBackPressedDispatcher.onBackPressed()
+                    isEnabled = true
+                }
+            }
+        })
     }
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
@@ -139,6 +133,19 @@ class MainActivity : BaseActivity() {
         recreate()
     }
 
+    private fun switchToTab(index: Int) {
+        // Ensure we are on the main tabs destination
+        navController.popBackStack(R.id.mainTabsFragment, false)
+        val host = supportFragmentManager.findFragmentById(R.id.nav_host_fragment)
+        val currentFragment = host?.childFragmentManager?.fragments?.firstOrNull()
+        if (currentFragment is com.powergrid.exemployee.presentation.maintabs.MainTabsFragment) {
+            currentFragment.switchToTab(index)
+        } else {
+            // If not currently loaded, navigate there and pass the index (can handle via args if needed)
+            navController.navigate(R.id.mainTabsFragment)
+        }
+    }
+
     private fun toggleBold() {
         val wasBold = FontPrefs.isBold(this)
         FontPrefs.setBold(this, !wasBold)
@@ -148,13 +155,8 @@ class MainActivity : BaseActivity() {
 
     override fun onSupportNavigateUp() = navController.navigateUp(appBarConfig) || super.onSupportNavigateUp()
 
-    @Suppress("DEPRECATION")
-    override fun onBackPressed() {
-        if (binding.drawerLayout.isDrawerOpen(GravityCompat.END)) {
-            binding.drawerLayout.closeDrawer(GravityCompat.END)
-        } else {
-            super.onBackPressed()
-        }
+    fun openDrawer() {
+        binding.drawerLayout.openDrawer(GravityCompat.END)
     }
 
     override fun attachBaseContext(newBase: Context) {

@@ -5,7 +5,9 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import com.google.android.material.dialog.MaterialAlertDialogBuilder
+import android.widget.Button
+import android.widget.LinearLayout
+import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.powergrid.exemployee.ExEmployeeApp
 import com.powergrid.exemployee.R
 import com.powergrid.exemployee.common.BaseFragment
@@ -14,10 +16,15 @@ import com.powergrid.exemployee.common.ThemePrefs
 import com.powergrid.exemployee.databinding.FragmentSettingsBinding
 import com.powergrid.exemployee.presentation.MainActivity
 import com.powergrid.exemployee.presentation.auth.LoginActivity
+import com.powergrid.exemployee.security.BiometricHelper
+import com.powergrid.exemployee.security.BiometricResult
 import dagger.hilt.android.AndroidEntryPoint
+import javax.inject.Inject
 
 @AndroidEntryPoint
 class SettingsFragment : BaseFragment() {
+
+    @Inject lateinit var biometric: BiometricHelper
 
     private var _binding: FragmentSettingsBinding? = null
     private val binding get() = _binding!!
@@ -34,17 +41,40 @@ class SettingsFragment : BaseFragment() {
     }
 
     private fun setupAccount() {
-        binding.layoutSignOut.setOnClickListener {
-            MaterialAlertDialogBuilder(requireContext())
-                .setTitle(R.string.sign_out_confirm_title)
-                .setMessage(R.string.sign_out_confirm_message)
-                .setPositiveButton(R.string.btn_sign_out) { _, _ ->
-                    startActivity(Intent(requireContext(), LoginActivity::class.java).apply {
-                        flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
-                    })
+        val hasSecret = biometric.hasStoredSecret()
+        binding.switchBiometric.isChecked = hasSecret
+        binding.switchBiometric.isEnabled = biometric.isAvailable()
+
+        binding.switchBiometric.setOnCheckedChangeListener { buttonView, isChecked ->
+            if (isChecked && !hasSecret) {
+                val token = (requireActivity() as MainActivity).authToken
+                if (token.isEmpty()) {
+                    buttonView.isChecked = false
+                    return@setOnCheckedChangeListener
                 }
-                .setNegativeButton(android.R.string.cancel, null)
-                .show()
+                biometric.promptToEncryptAndStore(requireActivity(), token) { result ->
+                    if (result !is BiometricResult.Success) {
+                        buttonView.isChecked = false
+                    }
+                }
+            } else if (!isChecked && hasSecret) {
+                biometric.clearSecret()
+            }
+        }
+
+        binding.layoutSignOut.setOnClickListener {
+            val dialog = BottomSheetDialog(requireContext())
+            val view = layoutInflater.inflate(R.layout.layout_bottom_sheet_signout, null)
+            dialog.setContentView(view)
+
+            view.findViewById<Button>(R.id.btnCancel).setOnClickListener { dialog.dismiss() }
+            view.findViewById<Button>(R.id.btnSignOut).setOnClickListener {
+                dialog.dismiss()
+                startActivity(Intent(requireContext(), LoginActivity::class.java).apply {
+                    flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
+                })
+            }
+            dialog.show()
         }
     }
 
@@ -81,17 +111,27 @@ class SettingsFragment : BaseFragment() {
         val labels = themes.map { it.label }.toTypedArray()
         val currentIdx = themes.indexOf(ThemePrefs.getTheme(requireContext()))
 
-        MaterialAlertDialogBuilder(requireContext())
-            .setTitle(R.string.settings_choose_theme)
-            .setSingleChoiceItems(labels, currentIdx) { dialog, which ->
+        val dialog = BottomSheetDialog(requireContext())
+        val view = layoutInflater.inflate(R.layout.layout_bottom_sheet_theme, null)
+        dialog.setContentView(view)
+
+        val container = view.findViewById<LinearLayout>(R.id.layoutThemesContainer)
+        themes.forEachIndexed { index, theme ->
+            val tv = layoutInflater.inflate(android.R.layout.simple_list_item_single_choice, container, false) as android.widget.CheckedTextView
+            tv.text = theme.label
+            tv.isChecked = (index == currentIdx)
+            // Style it to match Material You
+            tv.setPadding(64, 48, 64, 48)
+            tv.setTextAppearance(androidx.appcompat.R.style.TextAppearance_AppCompat_Subhead)
+            tv.setOnClickListener {
                 dialog.dismiss()
-                val chosen = themes[which]
-                ThemePrefs.setTheme(requireContext(), chosen)
+                ThemePrefs.setTheme(requireContext(), theme)
                 (requireActivity().application as ExEmployeeApp).applyTheme()
                 requireActivity().recreate()
             }
-            .setNegativeButton(android.R.string.cancel, null)
-            .show()
+            container.addView(tv)
+        }
+        dialog.show()
     }
 
     override fun onDestroyView() {

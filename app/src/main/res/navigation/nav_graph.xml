@@ -2,11 +2,8 @@
 <navigation xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:id="@+id/nav_graph"
-    app:startDestination="@id/homeFragment">
-    <fragment android:id="@+id/homeFragment"         android:name="com.powergrid.exemployee.presentation.home.HomeFragment"                 android:label="@string/title_home"/>
-    <fragment android:id="@+id/noticeboardFragment"  android:name="com.powergrid.exemployee.presentation.noticeboard.NoticeboardFragment"   android:label="@string/title_noticeboard"/>
-    <fragment android:id="@+id/dependantsFragment"   android:name="com.powergrid.exemployee.presentation.dependants.DependantsFragment"     android:label="@string/title_dependants"/>
-    <fragment android:id="@+id/livelinessFragment"   android:name="com.powergrid.exemployee.presentation.liveliness.LivelinessFragment"     android:label="@string/title_liveliness"/>
+    app:startDestination="@id/mainTabsFragment">
+    <fragment android:id="@+id/mainTabsFragment"     android:name="com.powergrid.exemployee.presentation.maintabs.MainTabsFragment"         android:label="@string/title_home"/>
     <fragment android:id="@+id/verificationFragment" android:name="com.powergrid.exemployee.presentation.verification.VerificationFragment" android:label="@string/title_verification"/>
     <fragment android:id="@+id/settingsFragment"     android:name="com.powergrid.exemployee.presentation.settings.SettingsFragment"         android:label="@string/title_settings"/>
     <fragment android:id="@+id/aboutFragment"        android:name="com.powergrid.exemployee.presentation.about.AboutFragment"               android:label="@string/title_about"/>
