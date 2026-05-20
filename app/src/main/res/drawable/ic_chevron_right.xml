@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
-<!-- Material Symbols Rounded: Chevron Right -->
 <vector xmlns:android="http://schemas.android.com/apk/res/android"
     android:width="24dp" android:height="24dp"
-    android:viewportWidth="960" android:viewportHeight="960">
-    <path android:fillColor="@android:color/black"
-        android:pathData="M504,480l-184,-184q-11,-11 -11,-28t11,-28q11,-11 28,-11t28,11l184,184q6,6 8.5,13t2.5,15q0,8 -2.5,15t-8.5,13l-184,184q-11,11 -28,11t-28,-11q-11,-11 -11,-28t11,-28l184,-184Z"/>
+    android:viewportWidth="24" android:viewportHeight="24"
+    android:tint="?attr/colorControlNormal">
+    <path android:fillColor="#000000"
+        android:pathData="M10,6L8.59,7.41 13.17,12l-4.58,4.59L10,18l6,-6z"/>
 </vector>

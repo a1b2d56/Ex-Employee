@@ -36,7 +36,7 @@ class LoginActivity : BaseActivity() {
         setupTabs()
         setupPasswordTab()
         setupOtpTab()
-        setupBiometricButton()
+        autoLoginCheck()
         setupBypassButton()
         observeViewModels()
         vm.loadCaptcha()
@@ -94,21 +94,21 @@ class LoginActivity : BaseActivity() {
         }
     }
 
-    private fun setupBiometricButton() {
+    private fun autoLoginCheck() {
         if (biometric.isAvailable() && biometric.isEnabled() && biometric.hasStoredSecret()) {
-            binding.btnBiometric.visibility = View.VISIBLE
-            binding.btnBiometric.setOnClickListener {
-                biometric.promptToDecrypt(this) { result ->
-                    when (result) {
-                        is BiometricResult.Success  -> navigateToMain(String(result.data, Charsets.UTF_8))
-                        is BiometricResult.Error    -> snack(result.message)
-                        BiometricResult.Cancelled   -> Unit
-                        BiometricResult.NotAvailable -> Unit
-                    }
+            biometric.promptToDecrypt(this) { result ->
+                when (result) {
+                    is BiometricResult.Success  -> navigateToMain(String(result.data, Charsets.UTF_8))
+                    is BiometricResult.Error    -> snack(result.message)
+                    BiometricResult.Cancelled   -> Unit
+                    BiometricResult.NotAvailable -> Unit
                 }
             }
         } else {
-            binding.btnBiometric.visibility = View.GONE
+            val savedToken = com.powergrid.exemployee.common.AuthPrefs.getToken(this)
+            if (!savedToken.isNullOrEmpty()) {
+                navigateToMain(savedToken)
+            }
         }
     }
 
@@ -135,7 +135,13 @@ class LoginActivity : BaseActivity() {
         collectFlow(vm.loginState) { state ->
             when (state) {
                 is UiState.Loading -> showProgress(true)
-                is UiState.Success -> { showProgress(false); navigateToMain(state.data) }
+                is UiState.Success -> {
+                    showProgress(false)
+                    if (!biometric.hasStoredSecret()) {
+                        com.powergrid.exemployee.common.AuthPrefs.saveToken(this, state.data)
+                    }
+                    navigateToMain(state.data)
+                }
                 is UiState.Error   -> { showProgress(false); snack(state.message); vm.resetLogin(); vm.loadCaptcha() }
                 UiState.Idle       -> showProgress(false)
             }
@@ -157,7 +163,13 @@ class LoginActivity : BaseActivity() {
         collectFlow(vm.otpVerify) { state ->
             when (state) {
                 is UiState.Loading -> showProgress(true)
-                is UiState.Success -> { showProgress(false); navigateToMain(state.data) }
+                is UiState.Success -> {
+                    showProgress(false)
+                    if (!biometric.hasStoredSecret()) {
+                        com.powergrid.exemployee.common.AuthPrefs.saveToken(this, state.data)
+                    }
+                    navigateToMain(state.data)
+                }
                 is UiState.Error   -> { showProgress(false); snack(state.message); vm.resetOtpVerify() }
                 UiState.Idle       -> showProgress(false)
             }

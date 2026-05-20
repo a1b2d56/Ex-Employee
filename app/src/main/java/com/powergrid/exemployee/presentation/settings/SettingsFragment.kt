@@ -53,11 +53,17 @@ class SettingsFragment : BaseFragment() {
                     return@setOnCheckedChangeListener
                 }
                 biometric.promptToEncryptAndStore(requireActivity(), token) { result ->
-                    if (result !is BiometricResult.Success) {
+                    if (result is BiometricResult.Success) {
+                        com.powergrid.exemployee.common.AuthPrefs.clearToken(requireContext())
+                    } else {
                         buttonView.isChecked = false
                     }
                 }
             } else if (!isChecked && hasSecret) {
+                val token = (requireActivity() as MainActivity).authToken
+                if (token.isNotEmpty()) {
+                    com.powergrid.exemployee.common.AuthPrefs.saveToken(requireContext(), token)
+                }
                 biometric.clearSecret()
             }
         }
@@ -70,6 +76,8 @@ class SettingsFragment : BaseFragment() {
             view.findViewById<Button>(R.id.btnCancel).setOnClickListener { dialog.dismiss() }
             view.findViewById<Button>(R.id.btnSignOut).setOnClickListener {
                 dialog.dismiss()
+                biometric.clearSecret()
+                com.powergrid.exemployee.common.AuthPrefs.clearToken(requireContext())
                 startActivity(Intent(requireContext(), LoginActivity::class.java).apply {
                     flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
                 })

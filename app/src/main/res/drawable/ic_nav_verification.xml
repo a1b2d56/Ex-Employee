@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
-<!-- Material Symbols Rounded: Verified User (filled) — shield with checkmark -->
 <vector xmlns:android="http://schemas.android.com/apk/res/android"
     android:width="24dp" android:height="24dp"
-    android:viewportWidth="960" android:viewportHeight="960">
-    <path android:fillColor="@android:color/black"
-        android:pathData="M480,880q-131,-33 -215.5,-144.5T180,480l0,-240l300,-120l300,120l0,240q0,144 -84.5,255.5T480,880ZM432,640l208,-208l-56,-56l-152,152l-72,-72l-56,56l128,128Z"/>
+    android:viewportWidth="24" android:viewportHeight="24"
+    android:tint="?attr/colorControlNormal">
+    <path android:fillColor="#000000"
+        android:pathData="M12,1L3,5v6c0,5.55 3.84,10.74 9,12 5.16,-1.26 9,-6.45 9,-12V5l-9,-4zM10,17l-3.5,-3.5 1.41,-1.41L10,14.17l5.59,-5.59L17,10l-7,7z"/>
 </vector>
