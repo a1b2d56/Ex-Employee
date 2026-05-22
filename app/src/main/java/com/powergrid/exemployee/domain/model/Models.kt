@@ -1,5 +1,6 @@
 package com.powergrid.exemployee.domain.model
 
+@Suppress("unused")
 data class CaptchaData(val token: String, val num1: Int, val num2: Int) {
     val question: String get() = "$num1  +  $num2  =  ?"
     val answer:   Int    get() = num1 + num2

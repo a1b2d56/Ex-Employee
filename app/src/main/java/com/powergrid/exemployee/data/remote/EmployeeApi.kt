@@ -4,6 +4,7 @@ import com.powergrid.exemployee.data.remote.model.*
 import retrofit2.Response
 import retrofit2.http.*
 
+@Suppress("unused")
 interface EmployeeApi {
     @GET("employee/info")
     suspend fun getEmployeeInfo(@Header("Authorization") token: String): Response<ApiEnvelope<EmployeeResponse>>

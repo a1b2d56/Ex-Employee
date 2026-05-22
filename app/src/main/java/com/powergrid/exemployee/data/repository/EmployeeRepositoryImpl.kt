@@ -8,6 +8,7 @@ import javax.inject.Inject
 import javax.inject.Singleton
 
 @Singleton
+@Suppress("unused", "UNUSED_PARAMETER")
 class EmployeeRepositoryImpl @Inject constructor(private val api: EmployeeApi) : EmployeeRepository {
 
     override suspend fun getEmployeeInfo(token: String): UiState<Employee> = safeCall {

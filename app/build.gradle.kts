@@ -4,7 +4,7 @@ plugins {
     id("com.google.devtools.ksp")
     id("com.google.dagger.hilt.android")
     id("org.jetbrains.kotlin.plugin.serialization")
-    id("kotlin-parcelize")
+    id("org.jetbrains.kotlin.plugin.compose")
 }
 
 android {
@@ -40,7 +40,7 @@ android {
     }
 
     buildFeatures {
-        viewBinding = true
+        compose    = true
         buildConfig = true
     }
 
@@ -48,7 +48,12 @@ android {
 
     packaging {
         resources {
-            excludes += setOf("/META-INF/{AL2.0,LGPL2.1}", "META-INF/DEPENDENCIES", "DebugProbesKt.bin")
+            excludes += setOf(
+                "/META-INF/{AL2.0,LGPL2.1}",
+                "META-INF/DEPENDENCIES",
+                "DebugProbesKt.bin",
+                "META-INF/versions/9/OSGI-INF/MANIFEST.MF"
+            )
         }
     }
 }
@@ -56,42 +61,49 @@ android {
 dependencies {
     coreLibraryDesugaring("com.android.tools:desugar_jdk_libs:2.1.5")
 
-    // AndroidX
+    // Compose BOM — single version source for all Compose artifacts
+    val composeBom = platform("androidx.compose:compose-bom:2025.05.01")
+    implementation(composeBom)
+
+    // Compose core
+    implementation("androidx.compose.ui:ui")
+    implementation("androidx.compose.ui:ui-graphics")
+    implementation("androidx.compose.ui:ui-tooling-preview")
+    implementation("androidx.compose.material3:material3")
+    implementation("androidx.compose.animation:animation")
+    debugImplementation("androidx.compose.ui:ui-tooling")
+
+    // AndroidX — Compose integration
+    implementation("androidx.activity:activity-compose:1.10.1")
+    implementation("androidx.lifecycle:lifecycle-viewmodel-compose:2.10.0")
+    implementation("androidx.lifecycle:lifecycle-runtime-compose:2.10.0")
+    implementation("androidx.navigation:navigation-compose:2.9.0")
+    implementation("androidx.hilt:hilt-navigation-compose:1.2.0")
+
+    // AndroidX core
     implementation("androidx.core:core-ktx:1.16.0")
-    implementation("androidx.appcompat:appcompat:1.7.0")
-    implementation("androidx.activity:activity-ktx:1.10.1")
-    implementation("androidx.fragment:fragment-ktx:1.8.8")
-    implementation("androidx.lifecycle:lifecycle-viewmodel-ktx:2.9.1")
-    implementation("androidx.lifecycle:lifecycle-livedata-ktx:2.9.1")
-    implementation("androidx.lifecycle:lifecycle-runtime-ktx:2.9.1")
     implementation("androidx.core:core-splashscreen:1.0.1")
-    implementation("androidx.constraintlayout:constraintlayout:2.2.1")
-    implementation("androidx.recyclerview:recyclerview:1.4.0")
-    implementation("androidx.swiperefreshlayout:swiperefreshlayout:1.2.0-beta01")
-    implementation("androidx.cardview:cardview:1.0.0")
+    implementation("androidx.lifecycle:lifecycle-viewmodel-ktx:2.10.0")
+    implementation("androidx.lifecycle:lifecycle-runtime-ktx:2.10.0")
 
-    // Navigation
-    implementation("androidx.navigation:navigation-fragment-ktx:2.9.0")
-    implementation("androidx.navigation:navigation-ui-ktx:2.9.0")
-
-    // Material Design
-    implementation("com.google.android.material:material:1.12.0")
+    // Material Design (still needed for some platform integrations)
+    implementation("com.google.android.material:material:1.14.0")
 
     // Hilt
     implementation("com.google.dagger:hilt-android:2.56.2")
     ksp("com.google.dagger:hilt-android-compiler:2.56.2")
 
     // Networking
-    implementation("com.squareup.retrofit2:retrofit:2.11.0")
-    implementation("com.squareup.okhttp3:okhttp:4.12.0")
-    implementation("com.squareup.okhttp3:logging-interceptor:4.12.0")
+    implementation("com.squareup.retrofit2:retrofit:3.0.0")
+    implementation("com.squareup.okhttp3:okhttp:5.3.2")
+    implementation("com.squareup.okhttp3:logging-interceptor:5.3.2")
     implementation("com.jakewharton.retrofit:retrofit2-kotlinx-serialization-converter:1.0.0")
 
     // Serialization
     implementation("org.jetbrains.kotlinx:kotlinx-serialization-json:1.8.1")
 
-    // DataStore
-    implementation("androidx.datastore:datastore-preferences:1.1.4")
+    // Security & EncryptedSharedPreferences
+    implementation("androidx.security:security-crypto:1.1.0-alpha06")
 
     // Biometrics
     implementation("androidx.biometric:biometric:1.1.0")
@@ -99,11 +111,11 @@ dependencies {
     // Coroutines
     implementation("org.jetbrains.kotlinx:kotlinx-coroutines-android:1.10.2")
 
-    // Coil
-    implementation("io.coil-kt:coil:2.7.0")
+    // Coil — Compose variant
+    implementation("io.coil-kt:coil-compose:2.7.0")
 
     // CameraX
-    val cameraxVersion = "1.4.1"
+    val cameraxVersion = "1.6.1"
     implementation("androidx.camera:camera-camera2:$cameraxVersion")
     implementation("androidx.camera:camera-lifecycle:$cameraxVersion")
     implementation("androidx.camera:camera-view:$cameraxVersion")

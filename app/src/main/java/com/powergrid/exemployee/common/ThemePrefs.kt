@@ -27,7 +27,8 @@ object ThemePrefs {
         ESPRESSO("Espresso"),
         MATCHA("Matcha"),
         NORD("Nord"),
-        ROSE("Rosé");
+        ROSE("Rosé"),
+        POWERGRID("PowerGrid");
 
         /** True when the theme tracks the system and uses Dynamic Colors on A12+ */
         val usesDynamicColors: Boolean
@@ -45,13 +46,9 @@ object ThemePrefs {
 
     /** Resolves the NightMode flag for AppCompatDelegate based on the current theme choice. */
     fun resolveNightMode(theme: AppTheme): Int = when (theme) {
-        AppTheme.LIGHT -> AppCompatDelegate.MODE_NIGHT_NO
+        AppTheme.LIGHT, AppTheme.POWERGRID -> AppCompatDelegate.MODE_NIGHT_NO
         AppTheme.DARK, AppTheme.MIDNIGHT,
         AppTheme.PHANTOM, AppTheme.OBSIDIAN, AppTheme.ESPRESSO,
         AppTheme.MATCHA, AppTheme.NORD, AppTheme.ROSE -> AppCompatDelegate.MODE_NIGHT_YES
     }
-
-    /** Whether Dynamic Colors should be applied (only for LIGHT/DARK/MIDNIGHT on A12+). */
-    fun shouldApplyDynamicColors(theme: AppTheme): Boolean =
-        theme.usesDynamicColors && Build.VERSION.SDK_INT >= Build.VERSION_CODES.S
 }

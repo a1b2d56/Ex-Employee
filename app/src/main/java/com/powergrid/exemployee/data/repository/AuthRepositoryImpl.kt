@@ -2,13 +2,14 @@ package com.powergrid.exemployee.data.repository
 
 import com.powergrid.exemployee.common.UiState
 import com.powergrid.exemployee.data.remote.AuthApi
-import com.powergrid.exemployee.data.remote.model.*
+
 import com.powergrid.exemployee.domain.model.CaptchaData
 import com.powergrid.exemployee.domain.repository.AuthRepository
 import javax.inject.Inject
 import javax.inject.Singleton
 
 @Singleton
+@Suppress("unused", "UNUSED_PARAMETER")
 class AuthRepositoryImpl @Inject constructor(private val api: AuthApi) : AuthRepository {
 
     override suspend fun fetchCaptcha(): UiState<CaptchaData> = safeCall {

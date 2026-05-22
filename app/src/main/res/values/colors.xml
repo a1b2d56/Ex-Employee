@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<resources>
+<resources xmlns:tools="http://schemas.android.com/tools" tools:ignore="UnusedResources">
     <!-- Light theme — PowerGrid deep blue + orange accent -->
     <color name="md_theme_primary">#005EB8</color>
     <color name="md_theme_onPrimary">#FFFFFF</color>
@@ -24,7 +24,7 @@
     <color name="md_theme_dark_onSurface">#E2E2E6</color>
     <color name="md_theme_dark_surfaceVariant">#42474E</color>
     <color name="md_theme_dark_error">#FFB4AB</color>
-    <!-- Status chip colours -->
+    <!-- Status chip colors -->
     <color name="status_active">#C8F5D1</color>
     <color name="status_inactive">#FFE0E0</color>
     <color name="status_verified">#C8F5D1</color>

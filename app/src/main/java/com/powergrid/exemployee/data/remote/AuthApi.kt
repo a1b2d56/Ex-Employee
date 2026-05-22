@@ -4,6 +4,7 @@ import com.powergrid.exemployee.data.remote.model.*
 import retrofit2.Response
 import retrofit2.http.*
 
+@Suppress("unused")
 interface AuthApi {
     /** STUB: Returns a captcha token + two numbers whose sum is the answer. */
     @GET("auth/captcha")

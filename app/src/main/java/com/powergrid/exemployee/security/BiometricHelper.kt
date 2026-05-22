@@ -19,15 +19,26 @@ import javax.crypto.spec.IvParameterSpec
 import javax.inject.Inject
 import javax.inject.Singleton
 
+@Suppress("unused")
 sealed class BiometricResult {
-    data class Success(val data: ByteArray) : BiometricResult()
+    data class Success(val data: ByteArray) : BiometricResult() {
+        override fun equals(other: Any?): Boolean {
+            if (this === other) return true
+            if (javaClass != other?.javaClass) return false
+            other as Success
+            return data.contentEquals(other.data)
+        }
+        override fun hashCode(): Int {
+            return data.contentHashCode()
+        }
+    }
     data class Error(val message: String)   : BiometricResult()
     object Cancelled    : BiometricResult()
     object NotAvailable : BiometricResult()
 }
 
 @Singleton
-class BiometricHelper @Inject constructor(@ApplicationContext private val context: Context) {
+class BiometricHelper @Inject constructor(@param:ApplicationContext private val context: Context) {
     companion object {
         private const val KEY_ALIAS       = "exemployee_bio_key"
         private const val KEYSTORE        = "AndroidKeyStore"
