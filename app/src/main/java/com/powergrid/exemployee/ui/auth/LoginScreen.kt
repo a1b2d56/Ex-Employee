@@ -10,6 +10,8 @@ import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.foundation.verticalScroll
+import androidx.compose.foundation.Canvas
+import androidx.compose.foundation.border
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.*
 import androidx.compose.material3.*
@@ -18,13 +20,17 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.geometry.Offset
+import androidx.compose.ui.graphics.Brush
+import androidx.compose.ui.graphics.TileMode
+import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.unit.dp
-import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.powergrid.exemployee.common.UiState
 import com.powergrid.exemployee.R
@@ -257,29 +263,89 @@ fun LoginScreen(
                     if (captchaState is UiState.Success) {
                         val captchaData = (captchaState as? UiState.Success)?.data
                         if (captchaData != null) {
-                            Row(
-                                verticalAlignment = Alignment.CenterVertically,
-                                modifier = Modifier.fillMaxWidth()
-                            ) {
-                                Text(
-                                    text = captchaData.question,
-                                    modifier = Modifier.weight(1f),
-                                    style = MaterialTheme.typography.titleMedium
-                                )
-                                IconButton(onClick = { viewModel.loadCaptcha() }) {
-                                    Icon(Icons.Outlined.Refresh, contentDescription = "Refresh Captcha")
-                                }
-                            }
                             Spacer(modifier = Modifier.height(8.dp))
-                            OutlinedTextField(
-                                value = captchaAnswer,
-                                onValueChange = { captchaAnswer = it },
-                                label = { Text("Enter answer") },
-                                keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
+                            Row(
                                 modifier = Modifier.fillMaxWidth(),
-                                singleLine = true,
-                                shape = RoundedCornerShape(24.dp)
-                            )
+                                verticalAlignment = Alignment.CenterVertically,
+                                horizontalArrangement = Arrangement.spacedBy(8.dp)
+                            ) {
+                                // Captcha Text
+                                val primaryColor = MaterialTheme.colorScheme.primary
+                                val stripeBrush = remember {
+                                    Brush.linearGradient(
+                                        colors = listOf(
+                                            primaryColor.copy(alpha = 0.1f),
+                                            primaryColor.copy(alpha = 0.3f)
+                                        ),
+                                        start = Offset(0f, 0f),
+                                        end = Offset(40f, 40f),
+                                        tileMode = TileMode.Repeated
+                                    )
+                                }
+                                
+                                Box(
+                                    modifier = Modifier
+                                        .weight(1f)
+                                        .height(56.dp)
+                                        .background(
+                                            brush = stripeBrush, 
+                                            shape = RoundedCornerShape(12.dp)
+                                        )
+                                        .border(
+                                            width = 1.dp,
+                                            color = primaryColor.copy(alpha=0.3f),
+                                            shape = RoundedCornerShape(12.dp)
+                                        ),
+                                    contentAlignment = Alignment.Center
+                                ) {
+                                    Text(
+                                        text = captchaData.question,
+                                        style = MaterialTheme.typography.titleLarge,
+                                        fontWeight = FontWeight.Bold,
+                                        color = primaryColor,
+                                        modifier = Modifier.graphicsLayer {
+                                            rotationZ = -2f
+                                        }
+                                    )
+                                    
+                                    Canvas(modifier = Modifier.fillMaxSize()) {
+                                        val canvasWidth = size.width
+                                        val canvasHeight = size.height
+                                        drawLine(
+                                            color = primaryColor.copy(alpha = 0.2f),
+                                            start = Offset(0f, canvasHeight * 0.2f),
+                                            end = Offset(canvasWidth, canvasHeight * 0.8f),
+                                            strokeWidth = 2f
+                                        )
+                                        drawLine(
+                                            color = primaryColor.copy(alpha = 0.2f),
+                                            start = Offset(canvasWidth * 0.2f, 0f),
+                                            end = Offset(canvasWidth * 0.8f, canvasHeight),
+                                            strokeWidth = 2f
+                                        )
+                                    }
+                                }
+                                
+                                // Refresh Button
+                                IconButton(onClick = { viewModel.loadCaptcha() }) {
+                                    Icon(
+                                        imageVector = Icons.Outlined.Refresh,
+                                        contentDescription = "Refresh Captcha",
+                                        tint = primaryColor
+                                    )
+                                }
+                
+                                // Captcha Input
+                                OutlinedTextField(
+                                    value = captchaAnswer,
+                                    onValueChange = { captchaAnswer = it },
+                                    label = { Text("Answer") },
+                                    keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
+                                    modifier = Modifier.weight(1f),
+                                    singleLine = true,
+                                    shape = RoundedCornerShape(12.dp)
+                                )
+                            }
                             Spacer(modifier = Modifier.height(24.dp))
                         }
                     }

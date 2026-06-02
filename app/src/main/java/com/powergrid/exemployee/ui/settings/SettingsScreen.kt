@@ -23,11 +23,13 @@ import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.ExposedDropdownMenuBox
 import androidx.compose.material3.ExposedDropdownMenuDefaults
+import androidx.compose.material3.Slider
+import kotlin.math.roundToInt
 import com.powergrid.exemployee.ui.components.SectionHeader
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.MenuAnchorType
+import androidx.compose.material3.ExposedDropdownMenuAnchorType
 import androidx.compose.material3.ModalBottomSheet
 import androidx.compose.material3.RadioButton
 import androidx.compose.material3.Scaffold
@@ -50,7 +52,7 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.fragment.app.FragmentActivity
-import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import com.powergrid.exemployee.R
 import com.powergrid.exemployee.common.AuthPrefs
 import com.powergrid.exemployee.common.FontPrefs
@@ -73,14 +75,28 @@ fun SettingsScreen(
 
     var showSignOutDialog by remember { mutableStateOf(false) }
     var showThemeSheet by remember { mutableStateOf(false) }
+
+    var showFontFamilySheet by remember { mutableStateOf(false) }
     
     var isBiometricEnabled by remember { mutableStateOf(viewModel.hasBiometricSecret()) }
     var currentTheme by remember { mutableStateOf(ThemePrefs.getTheme(context)) }
     var currentFontScale by remember { mutableFloatStateOf(FontPrefs.getScale(context)) }
     var currentIsBold by remember { mutableStateOf(FontPrefs.isBold(context)) }
+    var currentFontFamily by remember { mutableStateOf(FontPrefs.getFontFamily(context)) }
 
     val fontScales = listOf(0.85f, 1.0f, 1.15f, 1.30f)
     val fontScaleLabels = listOf("S", "M", "L", "XL")
+    val fontFamilies = listOf(
+        "default" to "System Default",
+        "inter" to "Inter",
+        "figtree" to "Figtree",
+        "outfit" to "Outfit",
+        "plus_jakarta_sans" to "Plus Jakarta Sans",
+        "source_sans_3" to "Source Sans 3",
+        "nunito_sans" to "Nunito Sans",
+        "work_sans" to "Work Sans",
+        "manrope" to "Manrope"
+    )
 
     LazyColumn(
         modifier = Modifier.fillMaxSize(),
@@ -186,17 +202,41 @@ fun SettingsScreen(
                         color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.08f)
                     )
 
-                    // Row 2: Font Size
+                    // Row 2: Font Size Slider
                     SettingsRow(
-                        title = "Font Size",
-                        subtitle = fontScaleLabels.getOrNull(fontScales.indexOf(currentFontScale)) ?: "M",
-                        iconRes = R.drawable.ic_font_size,
-                        iconColor = MaterialTheme.colorScheme.primary,
-                        modifier = Modifier.clickable { 
-                            val nextIdx = (fontScales.indexOf(currentFontScale) + 1) % fontScales.size
-                            currentFontScale = fontScales[nextIdx]
-                            FontPrefs.setScale(context, currentFontScale)
-                        }
+                         title = "Font Size",
+                         subtitle = fontScaleLabels.getOrNull(fontScales.indexOf(currentFontScale)) ?: "M",
+                         iconRes = R.drawable.ic_font_size,
+                         iconColor = MaterialTheme.colorScheme.primary
+                    )
+                    Slider(
+                        value = fontScales.indexOf(currentFontScale).toFloat(),
+                        onValueChange = { newValue ->
+                            val newIdx = newValue.roundToInt()
+                            if (newIdx in fontScales.indices) {
+                                currentFontScale = fontScales[newIdx]
+                                FontPrefs.setScale(context, currentFontScale)
+                            }
+                        },
+                        valueRange = 0f..(fontScales.size - 1).toFloat(),
+                        steps = fontScales.size - 2,
+                        modifier = Modifier.padding(horizontal = 24.dp)
+                    )
+
+                    HorizontalDivider(
+                        modifier = Modifier.padding(start = 68.dp, end = 16.dp),
+                        color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.08f)
+                    )
+
+                    // Row 2.5: Font Family
+                    SettingsRow(
+                         title = "Font Family",
+                         subtitle = fontFamilies.firstOrNull { it.first == currentFontFamily }?.second ?: "System Default",
+                         iconRes = R.drawable.ic_font_family,
+                         iconColor = MaterialTheme.colorScheme.primary,
+                         modifier = Modifier.clickable { 
+                             showFontFamilySheet = true
+                         }
                     )
 
                     HorizontalDivider(
@@ -275,6 +315,51 @@ fun SettingsScreen(
                         )
                         Spacer(modifier = Modifier.width(16.dp))
                         Text(text = theme.label, style = MaterialTheme.typography.bodyLarge)
+                    }
+                }
+            }
+        }
+    }
+
+
+
+    if (showFontFamilySheet) {
+        ModalBottomSheet(
+            onDismissRequest = { showFontFamilySheet = false },
+            containerColor = MaterialTheme.colorScheme.surface
+        ) {
+            LazyColumn(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(bottom = 32.dp)
+            ) {
+                item {
+                    Text(
+                        text = "Choose Font Family",
+                        style = MaterialTheme.typography.titleLarge,
+                        modifier = Modifier.padding(16.dp),
+                        fontWeight = FontWeight.Bold.dynamic()
+                    )
+                }
+                items(fontFamilies.size) { index ->
+                    val (key, label) = fontFamilies[index]
+                    Row(
+                        verticalAlignment = Alignment.CenterVertically,
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .clickable {
+                                currentFontFamily = key
+                                FontPrefs.setFontFamily(context, key)
+                                showFontFamilySheet = false
+                            }
+                            .padding(horizontal = 16.dp, vertical = 12.dp)
+                    ) {
+                        RadioButton(
+                            selected = currentFontFamily == key,
+                            onClick = null
+                        )
+                        Spacer(modifier = Modifier.width(16.dp))
+                        Text(text = label, style = MaterialTheme.typography.bodyLarge)
                     }
                 }
             }

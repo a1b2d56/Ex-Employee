@@ -1,5 +1,6 @@
 package com.powergrid.exemployee.ui.main
 
+import androidx.activity.compose.BackHandler
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.animateColor
 import androidx.compose.animation.core.animateFloat
@@ -92,7 +93,6 @@ fun MainScreen(
                     }
                 } else {
                     when (currentRoute) {
-                        Screen.Verification.route -> "Verification"
                         Screen.Settings.route -> "Settings"
                         Screen.About.route -> "About"
                         else -> "Ex-Employee"
@@ -100,7 +100,6 @@ fun MainScreen(
                 }
                 
                 val isSubDestination = currentRoute in listOf(
-                    Screen.Verification.route,
                     Screen.Settings.route,
                     Screen.About.route
                 )
@@ -340,6 +339,7 @@ private fun FullScreenMenuOverlay(
         modifier = Modifier.fillMaxSize(),
         color = MaterialTheme.colorScheme.background
     ) {
+        BackHandler(onBack = onClose)
         Column(
             modifier = Modifier
                 .fillMaxSize()
@@ -347,22 +347,7 @@ private fun FullScreenMenuOverlay(
                 .navigationBarsPadding(),
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
-            // Header close button row
-            Row(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(horizontal = 16.dp, vertical = 8.dp),
-                horizontalArrangement = Arrangement.End
-            ) {
-                IconButton(onClick = onClose) {
-                    Icon(
-                        imageVector = Icons.Default.Close,
-                        contentDescription = "Close Menu",
-                        modifier = Modifier.size(28.dp),
-                        tint = MaterialTheme.colorScheme.onBackground
-                    )
-                }
-            }
+
 
             // Scrollable Sidebar content
             LazyColumn(
@@ -497,17 +482,7 @@ private fun FullScreenMenuOverlay(
                                     onClick = { navigateToHomePager(3) },
                                     iconColor = primaryColor
                                 )
-                                HorizontalDivider(
-                                    modifier = Modifier.padding(start = 68.dp, end = 16.dp),
-                                    color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.08f)
-                                )
-                                SidebarRowItem(
-                                    title = "Verification Status",
-                                    subtitle = "Check document submission",
-                                    iconRes = R.drawable.ic_nav_verification,
-                                    onClick = { navigateToRoute(Screen.Verification.route) },
-                                    iconColor = primaryColor
-                                )
+
                             }
                         }
 

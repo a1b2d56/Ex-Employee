@@ -36,6 +36,7 @@ class MainActivity : AppCompatActivity() {
             var appTheme by remember { mutableStateOf(ThemePrefs.getTheme(context)) }
             var fontScale by remember { mutableFloatStateOf(FontPrefs.getScale(context)) }
             var isBold by remember { mutableStateOf(FontPrefs.isBold(context)) }
+            var fontFamilyKey by remember { mutableStateOf(FontPrefs.getFontFamily(context)) }
 
             DisposableEffect(context) {
                 val themePrefs = context.getSharedPreferences("theme_prefs", Context.MODE_PRIVATE)
@@ -47,9 +48,10 @@ class MainActivity : AppCompatActivity() {
                     }
                 }
                 fontListener = SharedPreferences.OnSharedPreferenceChangeListener { _, key ->
-                    if (key == "font_scale" || key == "font_bold") {
+                    if (key == "font_scale" || key == "font_bold" || key == "font_family") {
                         fontScale = FontPrefs.getScale(context)
                         isBold = FontPrefs.isBold(context)
+                        fontFamilyKey = FontPrefs.getFontFamily(context)
                     }
                 }
 
@@ -62,7 +64,7 @@ class MainActivity : AppCompatActivity() {
                 }
             }
 
-            ExEmployeeTheme(appTheme = appTheme, fontScale = fontScale, isBold = isBold) {
+            ExEmployeeTheme(appTheme = appTheme, fontScale = fontScale, isBold = isBold, fontFamilyKey = fontFamilyKey) {
                 MainScreen(
                     authToken = authToken,
                     onSignOut = {

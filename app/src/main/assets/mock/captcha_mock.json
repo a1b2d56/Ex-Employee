@@ -1,0 +1,38 @@
+[
+  {
+    "uniqueId": "captcha_token_1",
+    "number1": 8,
+    "number2": 5,
+    "operation": "+"
+  },
+  {
+    "uniqueId": "captcha_token_2",
+    "number1": 9,
+    "number2": 4,
+    "operation": "-"
+  },
+  {
+    "uniqueId": "captcha_token_3",
+    "number1": 6,
+    "number2": 3,
+    "operation": "*"
+  },
+  {
+    "uniqueId": "captcha_token_4",
+    "number1": 7,
+    "number2": 2,
+    "operation": "+"
+  },
+  {
+    "uniqueId": "captcha_token_5",
+    "number1": 8,
+    "number2": 6,
+    "operation": "-"
+  },
+  {
+    "uniqueId": "captcha_token_6",
+    "number1": 5,
+    "number2": 4,
+    "operation": "*"
+  }
+]

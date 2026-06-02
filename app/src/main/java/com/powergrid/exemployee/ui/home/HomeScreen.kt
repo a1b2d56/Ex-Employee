@@ -4,6 +4,7 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
@@ -28,7 +29,7 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
-import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import coil.compose.AsyncImage
 import com.powergrid.exemployee.common.UiState
@@ -45,6 +46,8 @@ import androidx.compose.ui.res.painterResource
 import com.powergrid.exemployee.R
 
 import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.graphics.Brush
+import androidx.compose.ui.graphics.Color
 import com.powergrid.exemployee.ui.theme.dynamic
 
 @Composable fun HomeScreen(
@@ -75,43 +78,45 @@ import com.powergrid.exemployee.ui.theme.dynamic
     Card(
         modifier = Modifier.fillMaxWidth().padding(horizontal = 16.dp),
         shape = RoundedCornerShape(18.dp),
-        elevation = CardDefaults.cardElevation(defaultElevation = if (MaterialTheme.colorScheme.surfaceContainerLow.alpha < 1f) 0.dp else 2.dp),
-        colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceContainerLow),
+        elevation = CardDefaults.cardElevation(defaultElevation = 2.dp),
+        colors = CardDefaults.cardColors(containerColor = Color.Transparent),
     ) {
         Column(
-            modifier = Modifier.padding(24.dp),
+            modifier = Modifier
+                .background(Brush.linearGradient(listOf(Color(0xFFE6C176), Color(0xFFC7983C))))
+                .padding(horizontal = 24.dp, vertical = 32.dp),
             horizontalAlignment = Alignment.CenterHorizontally,
         ) {
             ProfileAvatar(
                 photoUrl = employee.photoUrl,
-                size = 100.dp,
-                shadowElevation = if (MaterialTheme.colorScheme.surfaceContainerLow.alpha < 1f) 0.dp else 4.dp
+                size = 110.dp,
+                shadowElevation = 0.dp
             )
 
-            Spacer(Modifier.height(12.dp))
+            Spacer(Modifier.height(16.dp))
 
             Text(
                 text = employee.name,
                 style = MaterialTheme.typography.headlineSmall,
-                fontWeight = FontWeight.Bold.dynamic(),
-                color = MaterialTheme.colorScheme.onSurface,
+                fontWeight = FontWeight.Medium.dynamic(),
+                color = Color.Black,
             )
             Text(
-                text = employee.department,
+                text = employee.designation,
                 style = MaterialTheme.typography.bodyMedium,
-                color = MaterialTheme.colorScheme.onSurfaceVariant,
+                color = Color(0xFF333333),
             )
 
             Spacer(Modifier.height(16.dp))
-            HorizontalDivider(color = MaterialTheme.colorScheme.outlineVariant)
+            HorizontalDivider(color = Color(0x33000000), thickness = 1.dp)
             Spacer(Modifier.height(16.dp))
 
             // Info grid
             InfoRow("Employee ID", employee.employeeId)
-            InfoRow("Age", employee.age.toString())
             InfoRow("Date of Birth", employee.dob)
-            InfoRow("Email", employee.email)
             InfoRow("Phone", employee.phone)
+            InfoRow("Posting Region", employee.postingRegion)
+            InfoRow("Email", employee.email)
         }
     }
 }
@@ -122,18 +127,19 @@ import com.powergrid.exemployee.ui.theme.dynamic
             .fillMaxWidth()
             .padding(vertical = 6.dp),
         horizontalArrangement = Arrangement.SpaceBetween,
+        verticalAlignment = Alignment.CenterVertically
     ) {
         Text(
             text = label,
             style = MaterialTheme.typography.bodyMedium,
-            color = MaterialTheme.colorScheme.onSurfaceVariant,
+            color = Color(0xFF444444),
             modifier = Modifier.width(120.dp),
         )
         Text(
             text = value,
             style = MaterialTheme.typography.bodyMedium,
             fontWeight = FontWeight.Medium.dynamic(),
-            color = MaterialTheme.colorScheme.onSurface,
+            color = Color.Black,
             modifier = Modifier.weight(1f),
             textAlign = TextAlign.End
         )

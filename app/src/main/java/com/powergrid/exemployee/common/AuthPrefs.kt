@@ -1,3 +1,4 @@
+@file:Suppress("DEPRECATION")
 package com.powergrid.exemployee.common
 
 import android.content.Context

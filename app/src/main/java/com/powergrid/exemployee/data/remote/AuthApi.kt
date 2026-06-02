@@ -4,21 +4,31 @@ import com.powergrid.exemployee.data.remote.model.*
 import retrofit2.Response
 import retrofit2.http.*
 
-@Suppress("unused")
 interface AuthApi {
-    /** STUB: Returns a captcha token + two numbers whose sum is the answer. */
-    @GET("auth/captcha")
-    suspend fun getCaptcha(): Response<ApiEnvelope<CaptchaResponse>>
+    @GET("attd-api-v2/Auth/get-captcha")
+    suspend fun getCaptcha(
+        @Header("AuthToken") token: String
+    ): Response<CaptchaResponse>
 
-    /** STUB: Password login — returns auth token on success. */
-    @POST("auth/login")
-    suspend fun login(@Body req: LoginRequest): Response<ApiEnvelope<AuthResponse>>
+    @GET("attd-api-v2/Auth/get-auth-token")
+    suspend fun getOtpAuthToken(
+        @Query("appVersion") appVersion: String
+    ): Response<String>
 
-    /** STUB: Send OTP to username's registered mobile. */
-    @POST("auth/otp/send")
-    suspend fun sendOtp(@Body req: OtpRequest): Response<ApiEnvelope<Unit>>
+    @POST("attd-api-v2/Auth/post-v2")
+    suspend fun loginWithCaptcha(
+        @Body req: EmployeeLoginCaptchaDto
+    ): Response<AuthResponse>
 
-    /** STUB: Verify OTP entered by user. Returns auth token. */
-    @POST("auth/otp/verify")
-    suspend fun verifyOtp(@Body req: OtpVerifyRequest): Response<ApiEnvelope<AuthResponse>>
+    @POST("attd-api-v2/Auth/otp")
+    suspend fun sendOtp(
+        @Header("AuthToken") token: String,
+        @Body req: OtpSendRequest
+    ): Response<Unit>
+
+    @POST("attd-api-v2/Auth/authenticate-otp")
+    suspend fun verifyOtp(
+        @Header("AuthToken") token: String,
+        @Body req: OtpVerifyRequest
+    ): Response<AuthResponse>
 }

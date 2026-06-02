@@ -305,7 +305,7 @@ object RootDetector {
             val reader = process.inputStream.bufferedReader()
             var line: String?
             while (reader.readLine().also { line = it } != null) {
-                if (line != null && parseMountLine(line!!)) {
+                if (line != null && parseMountLine(line)) {
                     process.destroy()
                     return true
                 }

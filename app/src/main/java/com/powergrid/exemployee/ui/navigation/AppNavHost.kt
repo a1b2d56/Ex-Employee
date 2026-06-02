@@ -16,11 +16,11 @@ import com.powergrid.exemployee.ui.home.HomeScreen
 import com.powergrid.exemployee.ui.liveliness.LivelinessScreen
 import com.powergrid.exemployee.ui.noticeboard.NoticeboardScreen
 import com.powergrid.exemployee.ui.settings.SettingsScreen
-import com.powergrid.exemployee.ui.verification.VerificationScreen
 
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.pager.HorizontalPager
 import androidx.compose.foundation.pager.PagerState
+import androidx.compose.runtime.rememberCoroutineScope
 
 @Composable fun AppNavHost(
     navController: NavHostController,
@@ -29,6 +29,8 @@ import androidx.compose.foundation.pager.PagerState
     onSignOut: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
+    val scope = rememberCoroutineScope()
+
     NavHost(
         navController = navController,
         startDestination = Screen.Home.route,
@@ -58,10 +60,6 @@ import androidx.compose.foundation.pager.PagerState
                     3 -> LivelinessScreen(authToken = authToken)
                 }
             }
-        }
-
-        composable(Screen.Verification.route) {
-            VerificationScreen(authToken = authToken)
         }
 
         composable(Screen.Settings.route) {

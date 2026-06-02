@@ -31,8 +31,9 @@ class LoginActivity : AppCompatActivity() {
             val appTheme = ThemePrefs.getTheme(context)
             val fontScale = FontPrefs.getScale(context)
             val isBold = FontPrefs.isBold(context)
+            val fontFamilyKey = FontPrefs.getFontFamily(context)
 
-            ExEmployeeTheme(appTheme = appTheme, fontScale = fontScale, isBold = isBold) {
+            ExEmployeeTheme(appTheme = appTheme, fontScale = fontScale, isBold = isBold, fontFamilyKey = fontFamilyKey) {
                 LoginScreen(onLoginSuccess = { token -> navigateToMain(token) })
             }
         }

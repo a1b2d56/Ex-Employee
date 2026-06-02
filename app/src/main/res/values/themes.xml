@@ -30,36 +30,5 @@
     <style name="TextAppearance.ExEmployee.BodyMedium" parent="TextAppearance.Material3.BodyMedium"> <item name="android:textSize">15sp</item></style>
     <style name="TextAppearance.ExEmployee.TitleLarge" parent="TextAppearance.Material3.TitleLarge"> <item name="android:textSize">22sp</item></style>
 
-    <!-- Splash Screen compat theme (API 12+ backported via core-splashscreen) -->
-    <style name="Theme.ExEmployee.Splash" parent="Theme.SplashScreen">
-        <item name="windowSplashScreenBackground">@color/md_theme_primary</item>
-        <item name="windowSplashScreenAnimatedIcon">@drawable/ic_launcher_foreground</item>
-        <item name="postSplashScreenTheme">@style/Theme.ExEmployee</item>
-    </style>
 
-    <!-- ShapeableImageView circle overlay (profile avatars) -->
-    <style name="ShapeAppearanceOverlay.App.Circle" parent="">
-        <item name="cornerFamily">rounded</item>
-        <item name="cornerSize">50%</item>
-    </style>
-
-    <!-- ShapeableImageView rounded-large overlay (app logo) -->
-    <style name="ShapeAppearanceOverlay.App.RoundedLarge" parent="">
-        <item name="cornerFamily">rounded</item>
-        <item name="cornerSize">24dp</item>
-    </style>
-
-    <!-- Flat section header for settings-style screens -->
-    <style name="Widget.ExEmployee.SectionHeader" parent="">
-        <item name="android:layout_width">wrap_content</item>
-        <item name="android:layout_height">wrap_content</item>
-        <item name="android:textAppearance">?attr/textAppearanceLabelMedium</item>
-        <item name="android:textColor">?attr/colorPrimary</item>
-        <item name="android:letterSpacing">0.06</item>
-        <item name="android:textAllCaps">true</item>
-        <item name="android:paddingStart">20dp</item>
-        <item name="android:paddingEnd">20dp</item>
-        <item name="android:paddingTop">16dp</item>
-        <item name="android:paddingBottom">8dp</item>
-    </style>
 </resources>

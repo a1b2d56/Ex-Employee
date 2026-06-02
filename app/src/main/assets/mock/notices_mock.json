@@ -1,0 +1,26 @@
+[
+  {
+    "id": "n1",
+    "title": "Pension Revision Guidelines 2026",
+    "content": "Official guidelines and procedures for the 2026 pension revision scheme.",
+    "date": "24 May 2026",
+    "urgent": true,
+    "pdf_path": "mock_pdfs/pension_revision_2026.pdf"
+  },
+  {
+    "id": "n2",
+    "title": "Annual Medical Reimbursement Policy Update",
+    "content": "Updated guidelines for submitting annual medical reimbursement claims for FY 2025-26.",
+    "date": "18 May 2026",
+    "urgent": false,
+    "pdf_path": "mock_pdfs/medical_policy_2026.pdf"
+  },
+  {
+    "id": "n3",
+    "title": "CPF Interest Rate Declaration",
+    "content": "Declaration of the CPF interest rate for the financial year 2025-26.",
+    "date": "12 May 2026",
+    "urgent": false,
+    "pdf_path": "mock_pdfs/cpf_interest_2026.pdf"
+  }
+]

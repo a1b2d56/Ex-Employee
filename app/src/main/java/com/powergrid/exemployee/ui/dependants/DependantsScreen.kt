@@ -25,7 +25,10 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
-import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.border
+import androidx.compose.ui.text.font.FontWeight
+import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.compose.material.icons.outlined.Person
 import com.powergrid.exemployee.common.UiState
@@ -63,12 +66,10 @@ import com.powergrid.exemployee.ui.components.StatusChip
 }
 
 @Composable private fun DependantCard(dependant: Dependant) {
-    val isActive = dependant.status.equals("active", ignoreCase = true)
-
     Card(
-        modifier = Modifier.fillMaxWidth().padding(horizontal = 16.dp, vertical = 8.dp),
+        modifier = Modifier.fillMaxWidth(),
         shape = RoundedCornerShape(18.dp),
-        elevation = CardDefaults.cardElevation(defaultElevation = if (MaterialTheme.colorScheme.surfaceContainerLow.alpha < 1f) 0.dp else 2.dp),
+        elevation = CardDefaults.cardElevation(defaultElevation = 0.dp),
         colors = CardDefaults.cardColors(
             containerColor = MaterialTheme.colorScheme.surfaceContainerLow,
         )
@@ -77,20 +78,15 @@ import com.powergrid.exemployee.ui.components.StatusChip
             modifier = Modifier.padding(16.dp),
             verticalAlignment = Alignment.CenterVertically
         ) {
-            Surface(
-                shape = CircleShape,
-                color = MaterialTheme.colorScheme.primaryContainer,
-                shadowElevation = 4.dp,
-                modifier = Modifier.size(52.dp)
-            ) {
-                Icon(
-                    imageVector = Icons.Outlined.Person,
-                    contentDescription = null,
-                    tint = MaterialTheme.colorScheme.onPrimaryContainer,
-                    modifier = Modifier.padding(14.dp)
-                )
-            }
+            // Blue outlined circle
+            Box(
+                modifier = Modifier
+                    .size(52.dp)
+                    .border(2.dp, MaterialTheme.colorScheme.primary, CircleShape)
+            )
+            
             Spacer(modifier = Modifier.width(16.dp))
+            
             Column(Modifier.weight(1f)) {
                 Row(
                     modifier = Modifier.fillMaxWidth(),
@@ -100,27 +96,44 @@ import com.powergrid.exemployee.ui.components.StatusChip
                     Text(
                         text = dependant.name,
                         style = MaterialTheme.typography.titleMedium,
+                        color = MaterialTheme.colorScheme.onSurface,
                         modifier = Modifier.weight(1f),
                     )
-                    StatusChip(
-                        label = if (isActive) "Active" else "Inactive",
-                        backgroundColor = if (isActive) Color(0xFFC8F5D1) else Color(0xFFFFE0E0),
+                    
+                    val relationColor = MaterialTheme.colorScheme.onPrimaryContainer
+                    val relationBgColor = MaterialTheme.colorScheme.primaryContainer
+                    
+                    Surface(
+                        color = relationBgColor,
+                        shape = RoundedCornerShape(12.dp)
+                    ) {
+                        Text(
+                            text = dependant.relation,
+                            color = relationColor,
+                            style = MaterialTheme.typography.labelSmall,
+                            fontWeight = FontWeight.Bold,
+                            modifier = Modifier.padding(horizontal = 10.dp, vertical = 4.dp)
+                        )
+                    }
+                }
+
+                Spacer(Modifier.height(4.dp))
+                
+                if (dependant.dob.isNotEmpty()) {
+                    Text(
+                        text = "DOB: ${dependant.dob}",
+                        style = MaterialTheme.typography.bodySmall,
+                        color = MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.8f),
                     )
                 }
 
-                Spacer(Modifier.height(6.dp))
-
-                Text(
-                    text = dependant.relation,
-                    style = MaterialTheme.typography.bodySmall,
-                    color = MaterialTheme.colorScheme.onSurfaceVariant,
-                )
-
-                Text(
-                    text = "Age: ${dependant.age}",
-                    style = MaterialTheme.typography.bodySmall,
-                    color = MaterialTheme.colorScheme.onSurfaceVariant,
-                )
+                if (dependant.age > 0) {
+                    Text(
+                        text = "Age: ${dependant.age}",
+                        style = MaterialTheme.typography.bodySmall,
+                        color = MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.8f),
+                    )
+                }
             }
         }
     }

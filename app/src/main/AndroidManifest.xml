@@ -27,6 +27,10 @@
         android:enableOnBackInvokedCallback="true"
         tools:targetApi="33">
 
+        <meta-data
+            android:name="com.google.mlkit.vision.dependencies"
+            android:value="face" />
+
         <activity
             android:name=".ui.auth.LoginActivity"
             android:exported="true"

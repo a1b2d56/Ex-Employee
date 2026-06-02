@@ -28,13 +28,20 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.font.FontWeight
 import com.powergrid.exemployee.ui.theme.dynamic
 import androidx.compose.ui.unit.dp
-import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.powergrid.exemployee.common.UiState
 import com.powergrid.exemployee.domain.model.Notice
 import com.powergrid.exemployee.ui.components.ErrorMessage
 import com.powergrid.exemployee.ui.components.LoadingIndicator
 import com.powergrid.exemployee.ui.components.StatusChip
+import androidx.compose.foundation.clickable
+import androidx.compose.ui.platform.LocalContext
+import android.widget.Toast
+import androidx.compose.ui.text.style.TextDecoration
+import androidx.compose.ui.res.painterResource
+import com.powergrid.exemployee.R
+import androidx.compose.ui.graphics.Color
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable fun NoticeboardScreen(
@@ -77,11 +84,17 @@ import com.powergrid.exemployee.ui.components.StatusChip
 }
 
 @Composable private fun NoticeItem(notice: Notice, modifier: Modifier = Modifier) {
+    val context = LocalContext.current
     Card(
         modifier = modifier.fillMaxWidth(),
         shape = RoundedCornerShape(18.dp),
-        elevation = CardDefaults.cardElevation(defaultElevation = if (MaterialTheme.colorScheme.surfaceContainerLow.alpha < 1f) 0.dp else 2.dp),
-        colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceContainerLow)
+        elevation = CardDefaults.cardElevation(defaultElevation = 0.dp),
+        colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceContainerLow),
+        onClick = {
+            if (!notice.pdfPath.isNullOrEmpty()) {
+                Toast.makeText(context, "Downloading ${notice.title}...", Toast.LENGTH_SHORT).show()
+            }
+        }
     ) {
         Column(modifier = Modifier.padding(16.dp)) {
             Row(
@@ -101,8 +114,8 @@ import com.powergrid.exemployee.ui.components.StatusChip
                     Spacer(Modifier.width(8.dp))
                     StatusChip(
                         label = "Urgent",
-                        backgroundColor = MaterialTheme.colorScheme.errorContainer,
-                        contentColor = MaterialTheme.colorScheme.onErrorContainer,
+                        backgroundColor = Color(0xFFFFEBF0),
+                        contentColor = Color(0xFFD32F2F),
                     )
                 }
             }
@@ -122,6 +135,22 @@ import com.powergrid.exemployee.ui.components.StatusChip
                 style = MaterialTheme.typography.bodyMedium,
                 color = MaterialTheme.colorScheme.onSurface,
             )
+
+            if (!notice.pdfPath.isNullOrEmpty()) {
+                Spacer(Modifier.height(12.dp))
+                Row(
+                    modifier = Modifier.fillMaxWidth(),
+                    horizontalArrangement = Arrangement.End,
+                    verticalAlignment = Alignment.CenterVertically
+                ) {
+                    Text(
+                        text = "Download PDF Document ↓",
+                        style = MaterialTheme.typography.bodyMedium,
+                        color = MaterialTheme.colorScheme.primary,
+                        fontWeight = FontWeight.Medium.dynamic()
+                    )
+                }
+            }
         }
     }
 }

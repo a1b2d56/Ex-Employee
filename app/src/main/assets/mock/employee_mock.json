@@ -1,0 +1,79 @@
+{
+  "employee": {
+    "employee_id": "EMP-001",
+    "name": "Rajesh Kumar",
+    "designation": "Executive Director",
+    "dob": "15-03-1963",
+    "phone": "+91 98765 43210",
+    "posting_region": "Northern Region - II",
+    "email": "rajesh.kumar@powergrid.in",
+    "photo": "mock_images/employee_photo.png"
+  },
+  "family": [
+    {
+      "name": "Sunita Kumar",
+      "age": 58,
+      "dob": "22-07-1967",
+      "photo": "mock_images/family_sunita.png",
+      "relation": "Spouse"
+    },
+    {
+      "name": "Amit Kumar",
+      "age": 32,
+      "dob": "10-11-1993",
+      "photo": "mock_images/family_amit.png",
+      "relation": "Son"
+    },
+    {
+      "name": "Priya Sharma",
+      "age": 28,
+      "dob": "05-04-1997",
+      "photo": "mock_images/family_priya.png",
+      "relation": "Daughter"
+    }
+  ],
+  "profile_documents": [
+    {
+      "id": "pd1",
+      "doc_type": "Aadhaar Card",
+      "update_status": 0
+    },
+    {
+      "id": "pd2",
+      "doc_type": "PAN Card",
+      "update_status": 1
+    },
+    {
+      "id": "pd3",
+      "doc_type": "Pension Payment Order",
+      "update_status": 2
+    },
+    {
+      "id": "pd4",
+      "doc_type": "Service Book",
+      "update_status": 0
+    }
+  ],
+  "certificate_status": [
+    {
+      "id": "cs1",
+      "doc_type": "Aadhaar Card",
+      "status": 2
+    },
+    {
+      "id": "cs2",
+      "doc_type": "PAN Card",
+      "status": 2
+    },
+    {
+      "id": "cs3",
+      "doc_type": "Service Book",
+      "status": 1
+    },
+    {
+      "id": "cs4",
+      "doc_type": "Pension Payment Order",
+      "status": 0
+    }
+  ]
+}

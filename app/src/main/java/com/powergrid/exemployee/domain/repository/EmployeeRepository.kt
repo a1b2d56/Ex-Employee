@@ -9,4 +9,5 @@ interface EmployeeRepository {
     suspend fun getNotices(token: String): UiState<List<Notice>>
     suspend fun getDependants(token: String): UiState<List<Dependant>>
     suspend fun getVerificationItems(token: String): UiState<List<VerificationDoc>>
+    suspend fun getFamilyMembers(token: String): UiState<List<FamilyMember>>
 }
