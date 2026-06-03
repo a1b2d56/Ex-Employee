@@ -1,7 +1,5 @@
 package com.powergrid.exemployee.ui.about
 
-import android.os.Build
-import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
@@ -9,39 +7,23 @@ import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.clip
-import androidx.compose.foundation.border
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
-import com.powergrid.exemployee.R
 import com.powergrid.exemployee.ui.components.SectionHeader
 import com.powergrid.exemployee.ui.components.AppLogoBadge
-import com.powergrid.exemployee.ui.theme.LocalAppTheme
-import com.powergrid.exemployee.common.ThemePrefs.AppTheme
-
-import androidx.compose.ui.graphics.ColorFilter
 import com.powergrid.exemployee.ui.theme.dynamic
-import androidx.compose.foundation.background
-import androidx.compose.ui.graphics.Color
 
 @Composable
 fun AboutScreen() {
     val context = LocalContext.current
     val packageInfo = context.packageManager.getPackageInfo(context.packageName, 0)
     val versionName = packageInfo.versionName ?: "Unknown"
-    val versionCode = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
-        packageInfo.longVersionCode
-    } else {
-        @Suppress("DEPRECATION")
-        packageInfo.versionCode.toLong()
-    }
-
     Column(
         modifier = Modifier
             .fillMaxSize()
+            .background(MaterialTheme.colorScheme.background)
             .verticalScroll(rememberScrollState()),
         horizontalAlignment = Alignment.CenterHorizontally
     ) {

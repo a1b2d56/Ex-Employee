@@ -35,12 +35,8 @@ import com.powergrid.exemployee.domain.model.Notice
 import com.powergrid.exemployee.ui.components.ErrorMessage
 import com.powergrid.exemployee.ui.components.LoadingIndicator
 import com.powergrid.exemployee.ui.components.StatusChip
-import androidx.compose.foundation.clickable
 import androidx.compose.ui.platform.LocalContext
 import android.widget.Toast
-import androidx.compose.ui.text.style.TextDecoration
-import androidx.compose.ui.res.painterResource
-import com.powergrid.exemployee.R
 import androidx.compose.ui.graphics.Color
 
 @OptIn(ExperimentalMaterial3Api::class)

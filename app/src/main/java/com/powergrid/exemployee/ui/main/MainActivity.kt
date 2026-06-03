@@ -39,8 +39,8 @@ class MainActivity : AppCompatActivity() {
             var fontFamilyKey by remember { mutableStateOf(FontPrefs.getFontFamily(context)) }
 
             DisposableEffect(context) {
-                val themePrefs = context.getSharedPreferences("theme_prefs", Context.MODE_PRIVATE)
-                val fontPrefs = context.getSharedPreferences("font_prefs", Context.MODE_PRIVATE)
+                val themePrefs = context.getSharedPreferences("theme_prefs", MODE_PRIVATE)
+                val fontPrefs = context.getSharedPreferences("font_prefs", MODE_PRIVATE)
 
                 themeListener = SharedPreferences.OnSharedPreferenceChangeListener { _, key ->
                     if (key == "app_theme") {

@@ -10,10 +10,8 @@ import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
 import androidx.compose.animation.scaleIn
 import androidx.compose.animation.scaleOut
-import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.background
-import androidx.compose.foundation.border
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import com.powergrid.exemployee.common.FontPrefs
 import androidx.compose.material3.LocalContentColor
@@ -26,13 +24,12 @@ import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
-import androidx.compose.material.icons.filled.Close
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
@@ -48,13 +45,7 @@ import com.powergrid.exemployee.ui.navigation.Screen
 import androidx.navigation.NavHostController
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
-import androidx.compose.ui.layout.ContentScale
-import androidx.compose.ui.draw.clip
-import androidx.compose.ui.draw.shadow
-import coil.compose.AsyncImage
-import androidx.compose.material.icons.outlined.Person
-import com.powergrid.exemployee.ui.theme.dynamic
-import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.powergrid.exemployee.common.UiState
 import com.powergrid.exemployee.ui.home.HomeViewModel
@@ -109,7 +100,7 @@ fun MainScreen(
                         Text(
                             text = title,
                             style = MaterialTheme.typography.titleLarge,
-                            fontWeight = androidx.compose.ui.text.font.FontWeight.SemiBold.dynamic()
+                            fontWeight = FontWeight.SemiBold.dynamic()
                         ) 
                     },
                     navigationIcon = {
@@ -152,7 +143,7 @@ fun MainScreen(
                             }
                         }
                     },
-                    colors = TopAppBarDefaults.centerAlignedTopAppBarColors(
+                    colors = TopAppBarDefaults.topAppBarColors(
                         containerColor = MaterialTheme.colorScheme.background,
                         titleContentColor = MaterialTheme.colorScheme.onBackground,
                         navigationIconContentColor = MaterialTheme.colorScheme.onBackground,
@@ -190,7 +181,7 @@ fun MainScreen(
                         
                         bottomItems.forEach { entry ->
                             val (itemData, targetPage) = entry
-                            val (screen, label, iconResId) = itemData
+                            val (_, label, iconResId) = itemData
                             val isSelected = !isMenuOpen && currentRoute == Screen.Home.route && pagerState.currentPage == targetPage
                             
                             FloatingNavItem(
@@ -353,9 +344,10 @@ private fun FullScreenMenuOverlay(
             LazyColumn(
                 modifier = Modifier
                     .weight(1f)
-                    .fillMaxWidth(),
+                    .fillMaxWidth()
+                    .statusBarsPadding(),
                 horizontalAlignment = Alignment.CenterHorizontally,
-                contentPadding = PaddingValues(bottom = 24.dp)
+                contentPadding = PaddingValues(top = 48.dp, bottom = 24.dp)
             ) {
                 // Profile Header (Coil AsyncImage + Circular Backdrop)
                 item {
@@ -449,39 +441,7 @@ private fun FullScreenMenuOverlay(
                                     onClick = { navigateToHomePager(0) },
                                     iconColor = primaryColor
                                 )
-                                HorizontalDivider(
-                                    modifier = Modifier.padding(start = 68.dp, end = 16.dp),
-                                    color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.08f)
-                                )
-                                SidebarRowItem(
-                                    title = "Noticeboard",
-                                    subtitle = "Read latest notifications",
-                                    iconRes = R.drawable.ic_nav_noticeboard,
-                                    onClick = { navigateToHomePager(1) },
-                                    iconColor = primaryColor
-                                )
-                                HorizontalDivider(
-                                    modifier = Modifier.padding(start = 68.dp, end = 16.dp),
-                                    color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.08f)
-                                )
-                                SidebarRowItem(
-                                    title = "Dependants",
-                                    subtitle = "Manage family & dependants",
-                                    iconRes = R.drawable.ic_nav_dependants,
-                                    onClick = { navigateToHomePager(2) },
-                                    iconColor = primaryColor
-                                )
-                                HorizontalDivider(
-                                    modifier = Modifier.padding(start = 68.dp, end = 16.dp),
-                                    color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.08f)
-                                )
-                                SidebarRowItem(
-                                    title = "Liveliness Check",
-                                    subtitle = "Verification & vital check",
-                                    iconRes = R.drawable.ic_nav_liveliness,
-                                    onClick = { navigateToHomePager(3) },
-                                    iconColor = primaryColor
-                                )
+
 
                             }
                         }

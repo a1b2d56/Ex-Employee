@@ -11,7 +11,6 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
@@ -19,20 +18,15 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
-import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.material3.ExposedDropdownMenuBox
-import androidx.compose.material3.ExposedDropdownMenuDefaults
 import androidx.compose.material3.Slider
 import kotlin.math.roundToInt
 import com.powergrid.exemployee.ui.components.SectionHeader
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.ExposedDropdownMenuAnchorType
 import androidx.compose.material3.ModalBottomSheet
 import androidx.compose.material3.RadioButton
-import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Switch
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
@@ -99,7 +93,9 @@ fun SettingsScreen(
     )
 
     LazyColumn(
-        modifier = Modifier.fillMaxSize(),
+        modifier = Modifier
+            .fillMaxSize()
+            .background(MaterialTheme.colorScheme.background),
         contentPadding = PaddingValues(top = 10.dp, bottom = 24.dp),
         verticalArrangement = Arrangement.spacedBy(10.dp)
     ) {
@@ -372,8 +368,8 @@ private fun SettingsRow(
     title: String,
     subtitle: String,
     iconRes: Int,
-    iconColor: Color = MaterialTheme.colorScheme.primary,
     modifier: Modifier = Modifier,
+    iconColor: Color = MaterialTheme.colorScheme.primary,
     trailing: @Composable (() -> Unit)? = null
 ) {
     Row(

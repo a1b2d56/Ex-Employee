@@ -20,7 +20,6 @@ import com.powergrid.exemployee.ui.settings.SettingsScreen
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.pager.HorizontalPager
 import androidx.compose.foundation.pager.PagerState
-import androidx.compose.runtime.rememberCoroutineScope
 
 @Composable fun AppNavHost(
     navController: NavHostController,
@@ -29,7 +28,6 @@ import androidx.compose.runtime.rememberCoroutineScope
     onSignOut: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
-    val scope = rememberCoroutineScope()
 
     NavHost(
         navController = navController,

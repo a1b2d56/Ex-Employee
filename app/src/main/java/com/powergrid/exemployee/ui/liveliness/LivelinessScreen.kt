@@ -2,7 +2,6 @@ package com.powergrid.exemployee.ui.liveliness
 
 import android.Manifest
 import android.content.pm.PackageManager
-import android.graphics.BitmapFactory
 import android.util.Log
 import android.util.Size
 import androidx.activity.compose.rememberLauncherForActivityResult
@@ -13,12 +12,8 @@ import androidx.camera.core.resolutionselector.ResolutionSelector
 import androidx.camera.core.resolutionselector.ResolutionStrategy
 import androidx.camera.lifecycle.ProcessCameraProvider
 import androidx.camera.view.PreviewView
-import androidx.compose.animation.*
 import androidx.compose.foundation.Canvas
-import androidx.compose.foundation.Image
-import androidx.compose.foundation.background
 import androidx.compose.foundation.border
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
@@ -30,16 +25,12 @@ import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.clip
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.BlendMode
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.Path
-import androidx.compose.ui.graphics.asImageBitmap
 import androidx.compose.ui.graphics.drawscope.Stroke
-import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.viewinterop.AndroidView
@@ -51,12 +42,9 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.google.mlkit.vision.common.InputImage
 import com.google.mlkit.vision.face.Face
 import com.google.mlkit.vision.face.FaceDetection
-import com.google.mlkit.vision.face.FaceDetector
 import com.google.mlkit.vision.face.FaceDetectorOptions
-import com.powergrid.exemployee.R
 import com.powergrid.exemployee.ui.components.ErrorMessage
 import com.powergrid.exemployee.ui.components.LoadingIndicator
-import java.util.concurrent.ExecutorService
 import java.util.concurrent.Executors
 
 @Composable
@@ -64,7 +52,6 @@ fun LivelinessScreen(
     authToken: String,
     viewModel: LivelinessViewModel = hiltViewModel()
 ) {
-    val context = LocalContext.current
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
 
     LaunchedEffect(authToken) {
@@ -127,8 +114,8 @@ private fun CardSelectionView(
         
         LazyColumn(
             modifier = Modifier.fillMaxWidth(),
-            contentPadding = PaddingValues(horizontal = 16.dp, vertical = 12.dp),
-            verticalArrangement = Arrangement.spacedBy(12.dp)
+            contentPadding = PaddingValues(horizontal = 16.dp, vertical = 24.dp),
+            verticalArrangement = Arrangement.spacedBy(16.dp)
         ) {
             items(cardItems) { card ->
                 LivelinessCardRow(card = card, onClick = { onCardSelected(card) })
@@ -453,7 +440,7 @@ private fun CameraVerificationView(
                     if (uiState.faceMatchScore != null) {
                         Spacer(modifier = Modifier.height(8.dp))
                         Text(
-                            text = "Face Similarity Score: ${String.format("%.2f", uiState.faceMatchScore)}",
+                            text = "Face Similarity Score: ${String.format(java.util.Locale.getDefault(), "%.2f", uiState.faceMatchScore)}",
                             style = MaterialTheme.typography.bodyMedium,
                             fontWeight = FontWeight.Medium,
                             color = MaterialTheme.colorScheme.primary

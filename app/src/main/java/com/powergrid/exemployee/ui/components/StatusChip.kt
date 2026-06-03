@@ -13,6 +13,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.graphics.luminance
 import androidx.compose.ui.text.font.FontWeight
 
+@Suppress("SameParameterValue")
 @Composable fun StatusChip(
     label: String,
     backgroundColor: Color,

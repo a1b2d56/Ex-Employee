@@ -3,7 +3,6 @@ package com.powergrid.exemployee.domain.repository
 import com.powergrid.exemployee.common.UiState
 import com.powergrid.exemployee.domain.model.*
 
-@Suppress("unused", "UNUSED_PARAMETER")
 interface EmployeeRepository {
     suspend fun getEmployeeInfo(token: String): UiState<Employee>
     suspend fun getNotices(token: String): UiState<List<Notice>>

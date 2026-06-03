@@ -9,7 +9,6 @@ import javax.inject.Inject
 import javax.inject.Singleton
 
 @Singleton
-@Suppress("unused", "UNUSED_PARAMETER")
 class AuthRepositoryImpl @Inject constructor(private val api: AuthApi) : AuthRepository {
 
     override suspend fun fetchCaptcha(): UiState<CaptchaData> = safeCall {

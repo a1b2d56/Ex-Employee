@@ -1,12 +1,13 @@
 package com.powergrid.exemployee.ml
 
+import androidx.core.graphics.scale
+
 import android.content.Context
 import android.graphics.Bitmap
 import android.graphics.Rect
 import android.util.Log
 import org.tensorflow.lite.DataType
 import org.tensorflow.lite.Interpreter
-import org.tensorflow.lite.gpu.CompatibilityList
 import org.tensorflow.lite.gpu.GpuDelegate
 import org.tensorflow.lite.support.common.FileUtil
 import org.tensorflow.lite.support.common.TensorOperator
@@ -15,7 +16,6 @@ import org.tensorflow.lite.support.image.TensorImage
 import org.tensorflow.lite.support.image.ops.ResizeOp
 import org.tensorflow.lite.support.tensorbuffer.TensorBuffer
 import org.tensorflow.lite.support.tensorbuffer.TensorBufferFloat
-import java.nio.ByteBuffer
 import kotlin.math.max
 import kotlin.math.pow
 import kotlin.math.sqrt
@@ -50,10 +50,8 @@ class FaceNetHelper(context: Context) {
             val interpreterOptions = Interpreter.Options()
             gpuDelegate = null
             
-            if (gpuDelegate == null) {
-                interpreterOptions.numThreads = 4
-                interpreterOptions.setUseXNNPACK(true)
-            }
+            interpreterOptions.numThreads = 4
+            interpreterOptions.setUseXNNPACK(true)
             
             try {
                 interpreter = Interpreter(model, interpreterOptions)
@@ -118,13 +116,8 @@ class FaceNetHelper(context: Context) {
         
         val cosineSimilarity = dotProduct / (norm1Sqrt * norm2Sqrt)
         
-        var sumSquaredDiff = 0f
-        for (i in embedding1.indices) {
-            val diff = embedding1[i] - embedding2[i]
-            sumSquaredDiff += diff * diff
-        }
-        val l2Distance = sqrt(sumSquaredDiff)
         
+
         val normalizedScore = (cosineSimilarity + 1f) / 2f
         
         return normalizedScore
@@ -143,7 +136,7 @@ class FaceNetHelper(context: Context) {
         
         if (width <= 0 || height <= 0) {
             Log.w(TAG, "Invalid face bounds, using scaled full image")
-            return Bitmap.createScaledBitmap(fullBitmap, inputSize, inputSize, true)
+            return fullBitmap.scale(inputSize, inputSize, true)
         }
         
         return Bitmap.createBitmap(fullBitmap, left, top, width, height)

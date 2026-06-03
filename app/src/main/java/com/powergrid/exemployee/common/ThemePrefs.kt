@@ -1,7 +1,6 @@
 package com.powergrid.exemployee.common
 
 import android.content.Context
-import android.os.Build
 import androidx.appcompat.app.AppCompatDelegate
 import androidx.core.content.edit
 

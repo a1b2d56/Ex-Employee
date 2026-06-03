@@ -470,6 +470,7 @@ object RootDetector {
      * Audits system properties via multiple layers. Includes executing "getprop" as well as
      * calling SystemProperties.get through hidden JVM API reflection to bypass active Java-level mocks.
      */
+    @android.annotation.SuppressLint("PrivateApi")
     private fun checkSystemProperties(): Boolean {
         // Method 1: Reflection query of hidden android.os.SystemProperties (bypasses simple Java API level mocks!)
         try {

@@ -3,7 +3,6 @@ package com.powergrid.exemployee.domain.repository
 import com.powergrid.exemployee.common.UiState
 import com.powergrid.exemployee.domain.model.CaptchaData
 
-@Suppress("unused", "UNUSED_PARAMETER")
 interface AuthRepository {
     suspend fun fetchCaptcha(): UiState<CaptchaData>
     suspend fun loginWithPassword(username: String, password: String, captchaToken: String, captchaAnswer: Int): UiState<String>
