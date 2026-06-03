@@ -32,6 +32,7 @@ class EmployeeRepositoryImpl @Inject constructor(
     }
 
     override suspend fun getEmployeeInfo(token: String): UiState<Employee> = safeCall {
+        if (token.isBlank()) return@safeCall UiState.Error("Invalid token")
         val container = loadMockData()
         val d = container.employee
         UiState.Success(
@@ -49,6 +50,7 @@ class EmployeeRepositoryImpl @Inject constructor(
     }
 
     override suspend fun getNotices(token: String): UiState<List<Notice>> = safeCall {
+        if (token.isBlank()) return@safeCall UiState.Error("Invalid token")
         val open = context.assets.open("mock/notices_mock.json")
         val reader = BufferedReader(InputStreamReader(open, "UTF-8"))
         val content = reader.use { it.readText() }
@@ -67,6 +69,7 @@ class EmployeeRepositoryImpl @Inject constructor(
     }
 
     override suspend fun getDependants(token: String): UiState<List<Dependant>> = safeCall {
+        if (token.isBlank()) return@safeCall UiState.Error("Invalid token")
         val container = loadMockData()
         val list = container.family.mapIndexed { index, d ->
             val statusStr = when (index) {
@@ -87,6 +90,7 @@ class EmployeeRepositoryImpl @Inject constructor(
     }
 
     override suspend fun getVerificationItems(token: String): UiState<List<VerificationDoc>> = safeCall {
+        if (token.isBlank()) return@safeCall UiState.Error("Invalid token")
         val container = loadMockData()
         val list = container.certificateStatus.map { d ->
             val statusStr = when (d.status) {
@@ -109,6 +113,7 @@ class EmployeeRepositoryImpl @Inject constructor(
     }
 
     override suspend fun getFamilyMembers(token: String): UiState<List<FamilyMember>> = safeCall {
+        if (token.isBlank()) return@safeCall UiState.Error("Invalid token")
         val container = loadMockData()
         val list = container.family.map { d ->
             FamilyMember(

@@ -70,7 +70,6 @@ fun LivelinessScreen(
             }
             uiState.selectedCard == null -> {
                 CardSelectionView(
-                    statusMessage = uiState.statusMessage,
                     cardItems = uiState.cardItems,
                     onCardSelected = { card ->
                         viewModel.selectCard(card)
@@ -102,7 +101,6 @@ fun LivelinessScreen(
 
 @Composable
 private fun CardSelectionView(
-    statusMessage: String,
     cardItems: List<LivelinessCardItem>,
     onCardSelected: (LivelinessCardItem) -> Unit
 ) {

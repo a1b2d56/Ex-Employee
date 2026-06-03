@@ -32,6 +32,9 @@ class AuthRepositoryImpl @Inject constructor() : AuthRepository {
         //     UiState.Success(resp.body()!!.data!!.authToken)
         // else UiState.Error(resp.body()?.message ?: "Login failed")
         // ──────────────────────────────────────────────────────────────────────
+        if (captchaToken.isEmpty() || captchaAnswer < 0) {
+            return@safeCall UiState.Error("Invalid Captcha")
+        }
         if (username.isBlank() || password.isBlank()) UiState.Error("Username and password required")
         else UiState.Success("stub_auth_token_$username")
     }
@@ -44,6 +47,9 @@ class AuthRepositoryImpl @Inject constructor() : AuthRepository {
         // if (resp.isSuccessful && resp.body()?.success == true) UiState.Success(Unit)
         // else UiState.Error(resp.body()?.message ?: "Failed to send OTP")
         // ──────────────────────────────────────────────────────────────────────
+        if (captchaToken.isEmpty() || captchaAnswer < 0) {
+            return@safeCall UiState.Error("Invalid Captcha")
+        }
         if (username.isBlank()) UiState.Error("Username required")
         else UiState.Success(Unit)
     }

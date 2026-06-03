@@ -18,7 +18,6 @@ import javax.inject.Singleton
 
 @Module
 @InstallIn(SingletonComponent::class)
-@Suppress("unused")
 object NetworkModule {
 
     // ── MODIFY THIS: Set your actual API base URL ──────────────────────────

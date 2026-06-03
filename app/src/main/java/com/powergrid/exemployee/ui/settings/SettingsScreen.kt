@@ -25,7 +25,6 @@ import com.powergrid.exemployee.ui.components.SectionHeader
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.ModalBottomSheet
 import androidx.compose.material3.RadioButton
 import androidx.compose.material3.Switch
 import androidx.compose.material3.Text
@@ -40,6 +39,8 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.platform.LocalView
+import android.view.HapticFeedbackConstants
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
@@ -57,11 +58,11 @@ import com.powergrid.exemployee.ui.components.SignOutDialog
 @Composable
 fun SettingsScreen(
     authToken: String,
-    onNavigateToAbout: () -> Unit,
     onSignOut: () -> Unit,
     viewModel: SettingsViewModel = hiltViewModel()
 ) {
     val context = LocalContext.current
+    val view = LocalView.current
     val activity = context as? FragmentActivity
 
     var showSignOutDialog by remember { mutableStateOf(false) }
@@ -205,9 +206,10 @@ fun SettingsScreen(
                         value = fontScales.indexOf(currentFontScale).toFloat(),
                         onValueChange = { newValue ->
                             val newIdx = newValue.roundToInt()
-                            if (newIdx in fontScales.indices) {
+                            if (newIdx in fontScales.indices && fontScales[newIdx] != currentFontScale) {
                                 currentFontScale = fontScales[newIdx]
                                 FontPrefs.setScale(context, currentFontScale)
+                                view.performHapticFeedback(HapticFeedbackConstants.CLOCK_TICK)
                             }
                         },
                         valueRange = 0f..(fontScales.size - 1).toFloat(),
@@ -285,6 +287,7 @@ fun SettingsScreen(
                     fontWeight = FontWeight.Bold.dynamic()
                 )
             },
+            containerColor = MaterialTheme.colorScheme.surfaceContainerLowest,
             text = {
                 LazyColumn(modifier = Modifier.fillMaxWidth()) {
                     items(ThemePrefs.AppTheme.entries.size) { index ->
@@ -328,6 +331,7 @@ fun SettingsScreen(
                     fontWeight = FontWeight.Bold.dynamic()
                 )
             },
+            containerColor = MaterialTheme.colorScheme.surfaceContainerLowest,
             text = {
                 LazyColumn(modifier = Modifier.fillMaxWidth()) {
                     items(fontFamilies.size) { index ->

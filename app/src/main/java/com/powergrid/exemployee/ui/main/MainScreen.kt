@@ -10,6 +10,8 @@ import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
 import androidx.compose.animation.scaleIn
 import androidx.compose.animation.scaleOut
+import androidx.compose.animation.slideInHorizontally
+import androidx.compose.animation.slideOutHorizontally
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.background
 import androidx.compose.foundation.interaction.MutableInteractionSource
@@ -114,7 +116,7 @@ fun MainScreen(
                         }
                     },
                     actions = {
-                        if (currentRoute != Screen.Settings.route && currentRoute != Screen.About.route) {
+                        if (!isMenuOpen && currentRoute != Screen.Settings.route && currentRoute != Screen.About.route) {
                             val context = LocalContext.current
                             val isBold = com.powergrid.exemployee.ui.theme.LocalIsBold.current
                             val fontScales = listOf(0.85f, 1.0f, 1.15f, 1.3f)
@@ -150,73 +152,6 @@ fun MainScreen(
                         actionIconContentColor = MaterialTheme.colorScheme.onBackground
                     )
                 )
-            },
-            bottomBar = {
-                // Telegram-style floating bottom capsule
-                Surface(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(horizontal = 20.dp)
-                        .padding(bottom = 20.dp)
-                        .navigationBarsPadding(),
-                    shape = CircleShape,
-                    color = MaterialTheme.colorScheme.surfaceContainer,
-                    tonalElevation = 8.dp,
-                    shadowElevation = 10.dp
-                ) {
-                    Row(
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .height(68.dp)
-                            .padding(horizontal = 4.dp),
-                        verticalAlignment = Alignment.CenterVertically,
-                        horizontalArrangement = Arrangement.SpaceEvenly
-                    ) {
-                        val bottomItems = listOf(
-                            Triple(Screen.Home, "Home", R.drawable.ic_nav_home) to 0,
-                            Triple(Screen.Home, "Notices", R.drawable.ic_nav_noticeboard) to 1,
-                            Triple(Screen.Home, "Dependants", R.drawable.ic_nav_dependants) to 2,
-                            Triple(Screen.Home, "Liveliness", R.drawable.ic_nav_liveliness) to 3,
-                        )
-                        
-                        bottomItems.forEach { entry ->
-                            val (itemData, targetPage) = entry
-                            val (_, label, iconResId) = itemData
-                            val isSelected = !isMenuOpen && currentRoute == Screen.Home.route && pagerState.currentPage == targetPage
-                            
-                            FloatingNavItem(
-                                selected = isSelected,
-                                label = label,
-                                iconRes = iconResId,
-                                onClick = {
-                                    isMenuOpen = false
-                                    if (currentRoute != Screen.Home.route) {
-                                        navController.navigate(Screen.Home.route) {
-                                            popUpTo(navController.graph.findStartDestination().id) {
-                                                saveState = true
-                                            }
-                                            launchSingleTop = true
-                                            restoreState = true
-                                        }
-                                    }
-                                    scope.launch { pagerState.animateScrollToPage(targetPage) }
-                                },
-                                modifier = Modifier.weight(1f)
-                            )
-                        }
-
-                        // 5th Navigation Item: Menu Overlay Trigger
-                        FloatingNavItem(
-                            selected = isMenuOpen,
-                            label = "Menu",
-                            iconRes = R.drawable.ic_nav_menu,
-                            onClick = {
-                                isMenuOpen = !isMenuOpen
-                            },
-                            modifier = Modifier.weight(1f)
-                        )
-                    }
-                }
             }
         ) { padding ->
             AppNavHost(
@@ -224,15 +159,17 @@ fun MainScreen(
                 pagerState = pagerState,
                 authToken = authToken,
                 onSignOut = onSignOut,
-                modifier = Modifier.padding(padding)
+                modifier = Modifier
+                    .fillMaxSize()
+                    .padding(top = padding.calculateTopPadding(), bottom = 88.dp)
             )
         }
 
         // Full Screen Menu Overlay
         AnimatedVisibility(
             visible = isMenuOpen,
-            enter = fadeIn(animationSpec = spring()) + scaleIn(initialScale = 0.95f),
-            exit = fadeOut(animationSpec = spring()) + scaleOut(targetScale = 0.95f)
+            enter = fadeIn(spring()) + slideInHorizontally(spring()) { it / 4 },
+            exit = fadeOut(spring()) + slideOutHorizontally(spring()) { it / 4 }
         ) {
             FullScreenMenuOverlay(
                 navController = navController,
@@ -244,6 +181,73 @@ fun MainScreen(
                 },
                 authToken = authToken
             )
+        }
+
+        // Floating Bottom Nav Bar capsule drawn on top
+        Surface(
+            modifier = Modifier
+                .align(Alignment.BottomCenter)
+                .fillMaxWidth()
+                .padding(horizontal = 20.dp)
+                .padding(bottom = 20.dp)
+                .navigationBarsPadding(),
+            shape = CircleShape,
+            color = MaterialTheme.colorScheme.surfaceContainer,
+            tonalElevation = 8.dp,
+            shadowElevation = 10.dp
+        ) {
+            Row(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .height(68.dp)
+                    .padding(horizontal = 4.dp),
+                verticalAlignment = Alignment.CenterVertically,
+                horizontalArrangement = Arrangement.SpaceEvenly
+            ) {
+                val bottomItems = listOf(
+                    Triple(Screen.Home, "Home", R.drawable.ic_nav_home) to 0,
+                    Triple(Screen.Home, "Notices", R.drawable.ic_nav_noticeboard) to 1,
+                    Triple(Screen.Home, "Dependants", R.drawable.ic_nav_dependants) to 2,
+                    Triple(Screen.Home, "Liveliness", R.drawable.ic_nav_liveliness) to 3,
+                )
+                
+                bottomItems.forEach { entry ->
+                    val (itemData, targetPage) = entry
+                    val (_, label, iconResId) = itemData
+                    val isSelected = !isMenuOpen && currentRoute == Screen.Home.route && pagerState.currentPage == targetPage
+                    
+                    FloatingNavItem(
+                        selected = isSelected,
+                        label = label,
+                        iconRes = iconResId,
+                        onClick = {
+                            isMenuOpen = false
+                            if (currentRoute != Screen.Home.route) {
+                                navController.navigate(Screen.Home.route) {
+                                    popUpTo(navController.graph.findStartDestination().id) {
+                                        saveState = true
+                                    }
+                                    launchSingleTop = true
+                                    restoreState = true
+                                }
+                            }
+                            scope.launch { pagerState.animateScrollToPage(targetPage) }
+                        },
+                        modifier = Modifier.weight(1f)
+                    )
+                }
+
+                // 5th Navigation Item: Menu Overlay Trigger
+                FloatingNavItem(
+                    selected = isMenuOpen,
+                    label = "Menu",
+                    iconRes = R.drawable.ic_nav_menu,
+                    onClick = {
+                        isMenuOpen = !isMenuOpen
+                    },
+                    modifier = Modifier.weight(1f)
+                )
+            }
         }
 
         if (showSignOutDialog) {
@@ -347,7 +351,7 @@ private fun FullScreenMenuOverlay(
                     .fillMaxWidth()
                     .statusBarsPadding(),
                 horizontalAlignment = Alignment.CenterHorizontally,
-                contentPadding = PaddingValues(top = 48.dp, bottom = 24.dp)
+                contentPadding = PaddingValues(top = 96.dp, bottom = 100.dp)
             ) {
                 // Profile Header (Coil AsyncImage + Circular Backdrop)
                 item {

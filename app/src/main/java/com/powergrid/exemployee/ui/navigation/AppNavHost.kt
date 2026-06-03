@@ -16,9 +16,6 @@ import com.powergrid.exemployee.ui.home.HomeScreen
 import com.powergrid.exemployee.ui.liveliness.LivelinessScreen
 import com.powergrid.exemployee.ui.noticeboard.NoticeboardScreen
 import com.powergrid.exemployee.ui.settings.SettingsScreen
-import com.powergrid.exemployee.ui.theme.SpringOffset
-import com.powergrid.exemployee.ui.theme.fadeInSpring
-import com.powergrid.exemployee.ui.theme.fadeOutSpring
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.pager.HorizontalPager
 import androidx.compose.foundation.pager.PagerState
@@ -36,16 +33,16 @@ import androidx.compose.foundation.pager.PagerState
         startDestination = Screen.Home.route,
         modifier = modifier,
         enterTransition = {
-            fadeInSpring() + slideInHorizontally(SpringOffset) { it / 4 }
+            fadeIn(spring()) + slideInHorizontally(spring()) { it / 4 }
         },
         exitTransition = {
-            fadeOutSpring() + slideOutHorizontally(SpringOffset) { -it / 4 }
+            fadeOut(spring()) + slideOutHorizontally(spring()) { -it / 4 }
         },
         popEnterTransition = {
-            fadeInSpring() + slideInHorizontally(SpringOffset) { -it / 4 }
+            fadeIn(spring()) + slideInHorizontally(spring()) { -it / 4 }
         },
         popExitTransition = {
-            fadeOutSpring() + slideOutHorizontally(SpringOffset) { it / 4 }
+            fadeOut(spring()) + slideOutHorizontally(spring()) { it / 4 }
         },
     ) {
         composable(Screen.Home.route) {
@@ -65,7 +62,6 @@ import androidx.compose.foundation.pager.PagerState
         composable(Screen.Settings.route) {
             SettingsScreen(
                 authToken = authToken,
-                onNavigateToAbout = { navController.navigate(Screen.About.route) },
                 onSignOut = onSignOut,
             )
         }
