@@ -59,8 +59,6 @@ class BiometricHelper @Inject constructor(@param:ApplicationContext private val 
         return mgr.canAuthenticate(authenticators) == BiometricManager.BIOMETRIC_SUCCESS
     }
 
-    fun isEnabled()       = prefs.getBoolean(KEY_ENABLED, false)
-    fun setEnabled(v: Boolean) = prefs.edit { putBoolean(KEY_ENABLED, v) }
 
     fun hasStoredSecret() =
         !prefs.getString(KEY_CIPHER_TEXT, null).isNullOrBlank() &&

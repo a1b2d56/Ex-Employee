@@ -1,0 +1,28 @@
+<problems>
+<problem>
+  <file>file://$PROJECT_DIR$/gradle/libs.versions.toml</file>
+  <line>1</line>
+  <module>ExEmployee</module>
+  <entry_point TYPE="file" FQNAME="file://$PROJECT_DIR$/gradle/libs.versions.toml" />
+  <problem_class id="AndroidLintAligned16KB" severity="WARNING" attribute_key="WARNING_ATTRIBUTES">Native library dependency not 16 KB aligned</problem_class>
+  <hints />
+  <description>&lt;html&gt;The native library &lt;code&gt;x86_64/libtensorflowlite_gpu_jni.so&lt;/code&gt; (from &lt;code&gt;com.google.ai.edge.litert:litert-gpu:1.0.1&lt;/code&gt;) is not 16 KB aligned&lt;/html&gt;</description>
+  <highlighted_element>[versions] activityCompose = &quot;1.13.0&quot; biometric = &quot;1.1.0&quot; camera = &quot;1.6.1&quot; coilCompose = &quot;2.7.0&quot; com...</highlighted_element>
+  <language>TOML</language>
+  <offset>0</offset>
+  <length>4907</length>
+</problem>
+<problem>
+  <file>file://$PROJECT_DIR$/gradle/libs.versions.toml</file>
+  <line>1</line>
+  <module>ExEmployee</module>
+  <entry_point TYPE="file" FQNAME="file://$PROJECT_DIR$/gradle/libs.versions.toml" />
+  <problem_class id="AndroidLintAligned16KB" severity="WARNING" attribute_key="WARNING_ATTRIBUTES">Native library dependency not 16 KB aligned</problem_class>
+  <hints />
+  <description>&lt;html&gt;The native library &lt;code&gt;x86_64/libtensorflowlite_jni.so&lt;/code&gt; (from &lt;code&gt;com.google.ai.edge.litert:litert:1.0.1&lt;/code&gt;) is not 16 KB aligned&lt;/html&gt;</description>
+  <highlighted_element>[versions] activityCompose = &quot;1.13.0&quot; biometric = &quot;1.1.0&quot; camera = &quot;1.6.1&quot; coilCompose = &quot;2.7.0&quot; com...</highlighted_element>
+  <language>TOML</language>
+  <offset>0</offset>
+  <length>4907</length>
+</problem>
+</problems>

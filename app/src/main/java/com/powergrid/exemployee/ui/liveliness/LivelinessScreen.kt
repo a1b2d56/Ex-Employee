@@ -440,7 +440,7 @@ private fun CameraVerificationView(
                     if (uiState.faceMatchScore != null) {
                         Spacer(modifier = Modifier.height(8.dp))
                         Text(
-                            text = "Face Similarity Score: ${String.format(java.util.Locale.getDefault(), "%.2f", uiState.faceMatchScore)}",
+                            text = "Face Similarity Score: ${String.format(androidx.compose.ui.text.intl.Locale.current.platformLocale, "%.2f", uiState.faceMatchScore)}",
                             style = MaterialTheme.typography.bodyMedium,
                             fontWeight = FontWeight.Medium,
                             color = MaterialTheme.colorScheme.primary

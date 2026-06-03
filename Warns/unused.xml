@@ -1,0 +1,194 @@
+<problems>
+<problem>
+  <file>file://$PROJECT_DIR$/app/src/main/java/com/powergrid/exemployee/common/UiState.kt</file>
+  <line>7</line>
+  <module>ExEmployee.app.main</module>
+  <package>com.powergrid.exemployee.common</package>
+  <entry_point TYPE="method" FQNAME="com.powergrid.exemployee.common.UiState.Error Error(java.lang.String message, java.lang.Integer code)" />
+  <problem_class id="unused" severity="WARNING" attribute_key="WARNING_ATTRIBUTES">Unused declaration</problem_class>
+  <hints>
+    <hint value="code" />
+  </hints>
+  <description>Parameter &lt;code&gt;code&lt;/code&gt; is not used</description>
+  <highlighted_element>code</highlighted_element>
+  <language>kotlin</language>
+  <offset>46</offset>
+  <length>4</length>
+</problem>
+<problem>
+  <file>file://$PROJECT_DIR$/app/src/main/java/com/powergrid/exemployee/domain/repository/AuthRepository.kt</file>
+  <line>8</line>
+  <module>ExEmployee.app.main</module>
+  <package>com.powergrid.exemployee.domain.repository</package>
+  <entry_point TYPE="method" FQNAME="com.powergrid.exemployee.domain.repository.AuthRepository java.lang.Object loginWithPassword(java.lang.String username, java.lang.String password, java.lang.String captchaToken, int captchaAnswer, kotlin.coroutines.Continuation&lt;? super com.powergrid.exemployee.common.UiState&lt;java.lang.String&gt;&gt; $completion)" />
+  <problem_class id="unused" severity="WARNING" attribute_key="WARNING_ATTRIBUTES">Unused declaration</problem_class>
+  <hints>
+    <hint value="captchaToken" />
+  </hints>
+  <description>Parameter &lt;code&gt;captchaToken&lt;/code&gt; is not used in any implementation</description>
+  <highlighted_element>captchaToken</highlighted_element>
+  <language>kotlin</language>
+  <offset>70</offset>
+  <length>12</length>
+</problem>
+<problem>
+  <file>file://$PROJECT_DIR$/app/src/main/java/com/powergrid/exemployee/domain/repository/AuthRepository.kt</file>
+  <line>8</line>
+  <module>ExEmployee.app.main</module>
+  <package>com.powergrid.exemployee.domain.repository</package>
+  <entry_point TYPE="method" FQNAME="com.powergrid.exemployee.domain.repository.AuthRepository java.lang.Object loginWithPassword(java.lang.String username, java.lang.String password, java.lang.String captchaToken, int captchaAnswer, kotlin.coroutines.Continuation&lt;? super com.powergrid.exemployee.common.UiState&lt;java.lang.String&gt;&gt; $completion)" />
+  <problem_class id="unused" severity="WARNING" attribute_key="WARNING_ATTRIBUTES">Unused declaration</problem_class>
+  <hints>
+    <hint value="captchaAnswer" />
+  </hints>
+  <description>Parameter &lt;code&gt;captchaAnswer&lt;/code&gt; is not used in any implementation</description>
+  <highlighted_element>captchaAnswer</highlighted_element>
+  <language>kotlin</language>
+  <offset>92</offset>
+  <length>13</length>
+</problem>
+<problem>
+  <file>file://$PROJECT_DIR$/app/src/main/java/com/powergrid/exemployee/domain/repository/AuthRepository.kt</file>
+  <line>9</line>
+  <module>ExEmployee.app.main</module>
+  <package>com.powergrid.exemployee.domain.repository</package>
+  <entry_point TYPE="method" FQNAME="com.powergrid.exemployee.domain.repository.AuthRepository java.lang.Object sendOtp(java.lang.String username, java.lang.String captchaToken, int captchaAnswer, kotlin.coroutines.Continuation&lt;? super com.powergrid.exemployee.common.UiState&lt;kotlin.Unit&gt;&gt; $completion)" />
+  <problem_class id="unused" severity="WARNING" attribute_key="WARNING_ATTRIBUTES">Unused declaration</problem_class>
+  <hints>
+    <hint value="captchaToken" />
+  </hints>
+  <description>Parameter &lt;code&gt;captchaToken&lt;/code&gt; is not used in any implementation</description>
+  <highlighted_element>captchaToken</highlighted_element>
+  <language>kotlin</language>
+  <offset>42</offset>
+  <length>12</length>
+</problem>
+<problem>
+  <file>file://$PROJECT_DIR$/app/src/main/java/com/powergrid/exemployee/domain/repository/AuthRepository.kt</file>
+  <line>9</line>
+  <module>ExEmployee.app.main</module>
+  <package>com.powergrid.exemployee.domain.repository</package>
+  <entry_point TYPE="method" FQNAME="com.powergrid.exemployee.domain.repository.AuthRepository java.lang.Object sendOtp(java.lang.String username, java.lang.String captchaToken, int captchaAnswer, kotlin.coroutines.Continuation&lt;? super com.powergrid.exemployee.common.UiState&lt;kotlin.Unit&gt;&gt; $completion)" />
+  <problem_class id="unused" severity="WARNING" attribute_key="WARNING_ATTRIBUTES">Unused declaration</problem_class>
+  <hints>
+    <hint value="captchaAnswer" />
+  </hints>
+  <description>Parameter &lt;code&gt;captchaAnswer&lt;/code&gt; is not used in any implementation</description>
+  <highlighted_element>captchaAnswer</highlighted_element>
+  <language>kotlin</language>
+  <offset>64</offset>
+  <length>13</length>
+</problem>
+<problem>
+  <file>file://$PROJECT_DIR$/app/src/main/java/com/powergrid/exemployee/domain/repository/EmployeeRepository.kt</file>
+  <line>7</line>
+  <module>ExEmployee.app.main</module>
+  <package>com.powergrid.exemployee.domain.repository</package>
+  <entry_point TYPE="method" FQNAME="com.powergrid.exemployee.domain.repository.EmployeeRepository java.lang.Object getEmployeeInfo(java.lang.String token, kotlin.coroutines.Continuation&lt;? super com.powergrid.exemployee.common.UiState&lt;com.powergrid.exemployee.domain.model.Employee&gt;&gt; $completion)" />
+  <problem_class id="unused" severity="WARNING" attribute_key="WARNING_ATTRIBUTES">Unused declaration</problem_class>
+  <hints>
+    <hint value="token" />
+  </hints>
+  <description>Parameter &lt;code&gt;token&lt;/code&gt; is not used in any implementation</description>
+  <highlighted_element>token</highlighted_element>
+  <language>kotlin</language>
+  <offset>32</offset>
+  <length>5</length>
+</problem>
+<problem>
+  <file>file://$PROJECT_DIR$/app/src/main/java/com/powergrid/exemployee/domain/repository/EmployeeRepository.kt</file>
+  <line>8</line>
+  <module>ExEmployee.app.main</module>
+  <package>com.powergrid.exemployee.domain.repository</package>
+  <entry_point TYPE="method" FQNAME="com.powergrid.exemployee.domain.repository.EmployeeRepository java.lang.Object getNotices(java.lang.String token, kotlin.coroutines.Continuation&lt;? super com.powergrid.exemployee.common.UiState&lt;? extends java.util.List&lt;com.powergrid.exemployee.domain.model.Notice&gt;&gt;&gt; $completion)" />
+  <problem_class id="unused" severity="WARNING" attribute_key="WARNING_ATTRIBUTES">Unused declaration</problem_class>
+  <hints>
+    <hint value="token" />
+  </hints>
+  <description>Parameter &lt;code&gt;token&lt;/code&gt; is not used in any implementation</description>
+  <highlighted_element>token</highlighted_element>
+  <language>kotlin</language>
+  <offset>27</offset>
+  <length>5</length>
+</problem>
+<problem>
+  <file>file://$PROJECT_DIR$/app/src/main/java/com/powergrid/exemployee/domain/repository/EmployeeRepository.kt</file>
+  <line>9</line>
+  <module>ExEmployee.app.main</module>
+  <package>com.powergrid.exemployee.domain.repository</package>
+  <entry_point TYPE="method" FQNAME="com.powergrid.exemployee.domain.repository.EmployeeRepository java.lang.Object getDependants(java.lang.String token, kotlin.coroutines.Continuation&lt;? super com.powergrid.exemployee.common.UiState&lt;? extends java.util.List&lt;com.powergrid.exemployee.domain.model.Dependant&gt;&gt;&gt; $completion)" />
+  <problem_class id="unused" severity="WARNING" attribute_key="WARNING_ATTRIBUTES">Unused declaration</problem_class>
+  <hints>
+    <hint value="token" />
+  </hints>
+  <description>Parameter &lt;code&gt;token&lt;/code&gt; is not used in any implementation</description>
+  <highlighted_element>token</highlighted_element>
+  <language>kotlin</language>
+  <offset>30</offset>
+  <length>5</length>
+</problem>
+<problem>
+  <file>file://$PROJECT_DIR$/app/src/main/java/com/powergrid/exemployee/domain/repository/EmployeeRepository.kt</file>
+  <line>10</line>
+  <module>ExEmployee.app.main</module>
+  <package>com.powergrid.exemployee.domain.repository</package>
+  <entry_point TYPE="method" FQNAME="com.powergrid.exemployee.domain.repository.EmployeeRepository java.lang.Object getVerificationItems(java.lang.String token, kotlin.coroutines.Continuation&lt;? super com.powergrid.exemployee.common.UiState&lt;? extends java.util.List&lt;com.powergrid.exemployee.domain.model.VerificationDoc&gt;&gt;&gt; $completion)" />
+  <problem_class id="unused" severity="WARNING" attribute_key="WARNING_ATTRIBUTES">Unused declaration</problem_class>
+  <hints>
+    <hint value="token" />
+  </hints>
+  <description>Parameter &lt;code&gt;token&lt;/code&gt; is not used in any implementation</description>
+  <highlighted_element>token</highlighted_element>
+  <language>kotlin</language>
+  <offset>37</offset>
+  <length>5</length>
+</problem>
+<problem>
+  <file>file://$PROJECT_DIR$/app/src/main/java/com/powergrid/exemployee/domain/repository/EmployeeRepository.kt</file>
+  <line>11</line>
+  <module>ExEmployee.app.main</module>
+  <package>com.powergrid.exemployee.domain.repository</package>
+  <entry_point TYPE="method" FQNAME="com.powergrid.exemployee.domain.repository.EmployeeRepository java.lang.Object getFamilyMembers(java.lang.String token, kotlin.coroutines.Continuation&lt;? super com.powergrid.exemployee.common.UiState&lt;? extends java.util.List&lt;com.powergrid.exemployee.domain.model.FamilyMember&gt;&gt;&gt; $completion)" />
+  <problem_class id="unused" severity="WARNING" attribute_key="WARNING_ATTRIBUTES">Unused declaration</problem_class>
+  <hints>
+    <hint value="token" />
+  </hints>
+  <description>Parameter &lt;code&gt;token&lt;/code&gt; is not used in any implementation</description>
+  <highlighted_element>token</highlighted_element>
+  <language>kotlin</language>
+  <offset>33</offset>
+  <length>5</length>
+</problem>
+<problem>
+  <file>file://$PROJECT_DIR$/app/src/main/java/com/powergrid/exemployee/ui/liveliness/LivelinessScreen.kt</file>
+  <line>105</line>
+  <module>ExEmployee.app.main</module>
+  <package>com.powergrid.exemployee.ui.liveliness</package>
+  <entry_point TYPE="method" FQNAME="com.powergrid.exemployee.ui.liveliness.LivelinessScreenKt void CardSelectionView(java.lang.String statusMessage, java.util.List&lt;com.powergrid.exemployee.ui.liveliness.LivelinessCardItem&gt; cardItems, kotlin.jvm.functions.Function1&lt;? super com.powergrid.exemployee.ui.liveliness.LivelinessCardItem,kotlin.Unit&gt; onCardSelected)" />
+  <problem_class id="unused" severity="WARNING" attribute_key="WARNING_ATTRIBUTES">Unused declaration</problem_class>
+  <hints>
+    <hint value="statusMessage" />
+  </hints>
+  <description>Parameter &lt;code&gt;statusMessage&lt;/code&gt; is not used</description>
+  <highlighted_element>statusMessage</highlighted_element>
+  <language>kotlin</language>
+  <offset>4</offset>
+  <length>13</length>
+</problem>
+<problem>
+  <file>file://$PROJECT_DIR$/app/src/main/java/com/powergrid/exemployee/ui/settings/SettingsScreen.kt</file>
+  <line>63</line>
+  <module>ExEmployee.app.main</module>
+  <package>com.powergrid.exemployee.ui.settings</package>
+  <entry_point TYPE="method" FQNAME="com.powergrid.exemployee.ui.settings.SettingsScreenKt void SettingsScreen(java.lang.String authToken, kotlin.jvm.functions.Function0&lt;kotlin.Unit&gt; onNavigateToAbout, kotlin.jvm.functions.Function0&lt;kotlin.Unit&gt; onSignOut, com.powergrid.exemployee.ui.settings.SettingsViewModel viewModel)" />
+  <problem_class id="unused" severity="WARNING" attribute_key="WARNING_ATTRIBUTES">Unused declaration</problem_class>
+  <hints>
+    <hint value="onNavigateToAbout" />
+  </hints>
+  <description>Parameter &lt;code&gt;onNavigateToAbout&lt;/code&gt; is not used</description>
+  <highlighted_element>onNavigateToAbout</highlighted_element>
+  <language>kotlin</language>
+  <offset>4</offset>
+  <length>17</length>
+</problem>
+</problems>

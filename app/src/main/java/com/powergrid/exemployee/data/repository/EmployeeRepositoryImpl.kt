@@ -2,7 +2,7 @@ package com.powergrid.exemployee.data.repository
 
 import android.content.Context
 import com.powergrid.exemployee.common.UiState
-import com.powergrid.exemployee.data.remote.EmployeeApi
+
 import com.powergrid.exemployee.data.remote.model.EmployeeMockContainer
 import com.powergrid.exemployee.domain.model.*
 import com.powergrid.exemployee.domain.repository.EmployeeRepository
@@ -15,7 +15,6 @@ import javax.inject.Singleton
 
 @Singleton
 class EmployeeRepositoryImpl @Inject constructor(
-    private val api: EmployeeApi,
     @param:ApplicationContext private val context: Context
 ) : EmployeeRepository {
 

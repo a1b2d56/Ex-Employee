@@ -1,0 +1,80 @@
+<problems>
+<problem>
+  <file>file://$PROJECT_DIR$/app/src/main/java/com/powergrid/exemployee/ui/settings/SettingsScreen.kt</file>
+  <line>269</line>
+  <module>ExEmployee.app.main</module>
+  <package>com.powergrid.exemployee.ui.settings</package>
+  <entry_point TYPE="method" FQNAME="com.powergrid.exemployee.ui.settings.SettingsScreenKt void SettingsScreen(java.lang.String authToken, kotlin.jvm.functions.Function0&lt;kotlin.Unit&gt; onNavigateToAbout, kotlin.jvm.functions.Function0&lt;kotlin.Unit&gt; onSignOut, com.powergrid.exemployee.ui.settings.SettingsViewModel viewModel)" />
+  <problem_class id="AssignedValueIsNeverRead" severity="WARNING" attribute_key="NOT_USED_ELEMENT_ATTRIBUTES">Assigned value is never read</problem_class>
+  <description>Assigned value is never read</description>
+  <highlighted_element>showSignOutDialog</highlighted_element>
+  <language>kotlin</language>
+  <offset>26</offset>
+  <length>17</length>
+</problem>
+<problem>
+  <file>file://$PROJECT_DIR$/app/src/main/java/com/powergrid/exemployee/ui/settings/SettingsScreen.kt</file>
+  <line>271</line>
+  <module>ExEmployee.app.main</module>
+  <package>com.powergrid.exemployee.ui.settings</package>
+  <entry_point TYPE="method" FQNAME="com.powergrid.exemployee.ui.settings.SettingsScreenKt void SettingsScreen(java.lang.String authToken, kotlin.jvm.functions.Function0&lt;kotlin.Unit&gt; onNavigateToAbout, kotlin.jvm.functions.Function0&lt;kotlin.Unit&gt; onSignOut, com.powergrid.exemployee.ui.settings.SettingsViewModel viewModel)" />
+  <problem_class id="AssignedValueIsNeverRead" severity="WARNING" attribute_key="NOT_USED_ELEMENT_ATTRIBUTES">Assigned value is never read</problem_class>
+  <description>Assigned value is never read</description>
+  <highlighted_element>showSignOutDialog</highlighted_element>
+  <language>kotlin</language>
+  <offset>16</offset>
+  <length>17</length>
+</problem>
+<problem>
+  <file>file://$PROJECT_DIR$/app/src/main/java/com/powergrid/exemployee/ui/settings/SettingsScreen.kt</file>
+  <line>279</line>
+  <module>ExEmployee.app.main</module>
+  <package>com.powergrid.exemployee.ui.settings</package>
+  <entry_point TYPE="method" FQNAME="com.powergrid.exemployee.ui.settings.SettingsScreenKt void SettingsScreen(java.lang.String authToken, kotlin.jvm.functions.Function0&lt;kotlin.Unit&gt; onNavigateToAbout, kotlin.jvm.functions.Function0&lt;kotlin.Unit&gt; onSignOut, com.powergrid.exemployee.ui.settings.SettingsViewModel viewModel)" />
+  <problem_class id="AssignedValueIsNeverRead" severity="WARNING" attribute_key="NOT_USED_ELEMENT_ATTRIBUTES">Assigned value is never read</problem_class>
+  <description>Assigned value is never read</description>
+  <highlighted_element>showThemeSheet</highlighted_element>
+  <language>kotlin</language>
+  <offset>33</offset>
+  <length>14</length>
+</problem>
+<problem>
+  <file>file://$PROJECT_DIR$/app/src/main/java/com/powergrid/exemployee/ui/settings/SettingsScreen.kt</file>
+  <line>304</line>
+  <module>ExEmployee.app.main</module>
+  <package>com.powergrid.exemployee.ui.settings</package>
+  <entry_point TYPE="method" FQNAME="com.powergrid.exemployee.ui.settings.SettingsScreenKt void SettingsScreen(java.lang.String authToken, kotlin.jvm.functions.Function0&lt;kotlin.Unit&gt; onNavigateToAbout, kotlin.jvm.functions.Function0&lt;kotlin.Unit&gt; onSignOut, com.powergrid.exemployee.ui.settings.SettingsViewModel viewModel)" />
+  <problem_class id="AssignedValueIsNeverRead" severity="WARNING" attribute_key="NOT_USED_ELEMENT_ATTRIBUTES">Assigned value is never read</problem_class>
+  <description>Assigned value is never read</description>
+  <highlighted_element>showThemeSheet</highlighted_element>
+  <language>kotlin</language>
+  <offset>32</offset>
+  <length>14</length>
+</problem>
+<problem>
+  <file>file://$PROJECT_DIR$/app/src/main/java/com/powergrid/exemployee/ui/settings/SettingsScreen.kt</file>
+  <line>324</line>
+  <module>ExEmployee.app.main</module>
+  <package>com.powergrid.exemployee.ui.settings</package>
+  <entry_point TYPE="method" FQNAME="com.powergrid.exemployee.ui.settings.SettingsScreenKt void SettingsScreen(java.lang.String authToken, kotlin.jvm.functions.Function0&lt;kotlin.Unit&gt; onNavigateToAbout, kotlin.jvm.functions.Function0&lt;kotlin.Unit&gt; onSignOut, com.powergrid.exemployee.ui.settings.SettingsViewModel viewModel)" />
+  <problem_class id="AssignedValueIsNeverRead" severity="WARNING" attribute_key="NOT_USED_ELEMENT_ATTRIBUTES">Assigned value is never read</problem_class>
+  <description>Assigned value is never read</description>
+  <highlighted_element>showFontFamilySheet</highlighted_element>
+  <language>kotlin</language>
+  <offset>33</offset>
+  <length>19</length>
+</problem>
+<problem>
+  <file>file://$PROJECT_DIR$/app/src/main/java/com/powergrid/exemployee/ui/settings/SettingsScreen.kt</file>
+  <line>349</line>
+  <module>ExEmployee.app.main</module>
+  <package>com.powergrid.exemployee.ui.settings</package>
+  <entry_point TYPE="method" FQNAME="com.powergrid.exemployee.ui.settings.SettingsScreenKt void SettingsScreen(java.lang.String authToken, kotlin.jvm.functions.Function0&lt;kotlin.Unit&gt; onNavigateToAbout, kotlin.jvm.functions.Function0&lt;kotlin.Unit&gt; onSignOut, com.powergrid.exemployee.ui.settings.SettingsViewModel viewModel)" />
+  <problem_class id="AssignedValueIsNeverRead" severity="WARNING" attribute_key="NOT_USED_ELEMENT_ATTRIBUTES">Assigned value is never read</problem_class>
+  <description>Assigned value is never read</description>
+  <highlighted_element>showFontFamilySheet</highlighted_element>
+  <language>kotlin</language>
+  <offset>32</offset>
+  <length>19</length>
+</problem>
+</problems>

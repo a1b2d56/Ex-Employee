@@ -4,51 +4,7 @@ import androidx.compose.material3.darkColorScheme
 import androidx.compose.material3.lightColorScheme
 import androidx.compose.ui.graphics.Color
 
-// ── Status / badge colors (theme-independent) ──
 
-val StatusActive = Color(0xFFC8F5D1)
-val StatusInactive = Color(0xFFFFE0E0)
-val StatusVerified = Color(0xFFC8F5D1)
-val StatusRejected = Color(0xFFFFE0E0)
-val StatusPending = Color(0xFFFFF3CC)
-
-// ── Light ──
-
-val LightColorScheme = lightColorScheme(
-    primary = Color(0xFF005EB8),
-    onPrimary = Color(0xFFFFFFFF),
-    primaryContainer = Color(0xFFD6E4FF),
-    onPrimaryContainer = Color(0xFF001B47),
-    secondary = Color(0xFFE87722),
-    onSecondary = Color(0xFFFFFFFF),
-    tertiary = Color(0xFF006E2C),
-    surface = Color(0xFFFAFCFF),
-    onSurface = Color(0xFF1A1C1E),
-    surfaceVariant = Color(0xFFDEE3EB),
-    error = Color(0xFFBA1A1A),
-    onError = Color(0xFFFFFFFF),
-    background = Color(0xFFFAFCFF),
-    onBackground = Color(0xFF1A1C1E),
-)
-
-// ── Dark ──
-
-val DarkColorScheme = darkColorScheme(
-    primary = Color(0xFFA8C8FF),
-    onPrimary = Color(0xFF003072),
-    primaryContainer = Color(0xFF00469E),
-    onPrimaryContainer = Color(0xFFD6E4FF),
-    secondary = Color(0xFFFFB77A),
-    onSecondary = Color(0xFF4B2500),
-    tertiary = Color(0xFF72BE80),
-    surface = Color(0xFF111418),
-    onSurface = Color(0xFFE2E2E6),
-    surfaceVariant = Color(0xFF42474E),
-    error = Color(0xFFFFB4AB),
-    onError = Color(0xFF690005),
-    background = Color(0xFF111418),
-    onBackground = Color(0xFFE2E2E6),
-)
 
 // ── Midnight (AMOLED black) ──
 

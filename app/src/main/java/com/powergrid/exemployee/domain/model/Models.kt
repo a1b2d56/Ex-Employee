@@ -22,7 +22,9 @@ data class Employee(
     val photo:       String?,
 ) {
     val photoUrl: String? get() = photo
+    @Suppress("unused")
     val department: String get() = postingRegion
+    @Suppress("unused")
     val age: Int get() = try {
         val parts = dob.split("-")
         if (parts.size == 3) {

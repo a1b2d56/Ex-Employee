@@ -29,9 +29,6 @@ object ThemePrefs {
         ROSE("Rosé"),
         POWERGRID("PowerGrid");
 
-        /** True when the theme tracks the system and uses Dynamic Colors on A12+ */
-        val usesDynamicColors: Boolean
-            get() = this == LIGHT || this == DARK || this == MIDNIGHT
     }
 
     fun setTheme(ctx: Context, theme: AppTheme) {
