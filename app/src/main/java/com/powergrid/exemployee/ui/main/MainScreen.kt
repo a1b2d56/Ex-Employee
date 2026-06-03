@@ -53,6 +53,9 @@ import com.powergrid.exemployee.common.UiState
 import com.powergrid.exemployee.ui.home.HomeViewModel
 import com.powergrid.exemployee.ui.components.SignOutDialog
 import com.powergrid.exemployee.ui.components.ProfileAvatar
+import com.powergrid.exemployee.ui.components.glassPanel
+import com.kyant.backdrop.backdrops.layerBackdrop
+import com.kyant.backdrop.backdrops.rememberLayerBackdrop
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -72,6 +75,9 @@ fun MainScreen(
 
     var isMenuOpen by remember { mutableStateOf(false) }
     var showSignOutDialog by remember { mutableStateOf(false) }
+
+    // Backdrop capture state for frosted glass effects
+    val backdrop = rememberLayerBackdrop()
 
     Box(modifier = Modifier.fillMaxSize()) {
         Scaffold(
@@ -154,15 +160,22 @@ fun MainScreen(
                 )
             }
         ) { padding ->
-            AppNavHost(
-                navController = navController,
-                pagerState = pagerState,
-                authToken = authToken,
-                onSignOut = onSignOut,
+            // Apply layerBackdrop so child glass elements can capture this content
+            Box(
                 modifier = Modifier
                     .fillMaxSize()
-                    .padding(top = padding.calculateTopPadding(), bottom = 88.dp)
-            )
+                    .layerBackdrop(backdrop)
+            ) {
+                AppNavHost(
+                    navController = navController,
+                    pagerState = pagerState,
+                    authToken = authToken,
+                    onSignOut = onSignOut,
+                    modifier = Modifier
+                        .fillMaxSize()
+                        .padding(top = padding.calculateTopPadding(), bottom = 88.dp)
+                )
+            }
         }
 
         // Full Screen Menu Overlay
@@ -179,22 +192,25 @@ fun MainScreen(
                 onSignOutClick = {
                     showSignOutDialog = true
                 },
-                authToken = authToken
+                authToken = authToken,
+                backdrop = backdrop
             )
         }
 
-        // Floating Bottom Nav Bar capsule drawn on top
-        Surface(
+        // Floating Bottom Nav Bar capsule drawn on top — frosted glass
+        Box(
             modifier = Modifier
                 .align(Alignment.BottomCenter)
                 .fillMaxWidth()
                 .padding(horizontal = 20.dp)
                 .padding(bottom = 20.dp)
-                .navigationBarsPadding(),
-            shape = CircleShape,
-            color = MaterialTheme.colorScheme.surfaceContainer,
-            tonalElevation = 8.dp,
-            shadowElevation = 10.dp
+                .navigationBarsPadding()
+                .glassPanel(
+                    backdrop = backdrop,
+                    shape = CircleShape,
+                    blurRadius = 16.dp,
+                    fallbackColor = MaterialTheme.colorScheme.surfaceContainer
+                )
         ) {
             Row(
                 modifier = Modifier
@@ -320,6 +336,7 @@ private fun FullScreenMenuOverlay(
     scope: CoroutineScope,
     onClose: () -> Unit,
     onSignOutClick: () -> Unit,
+    backdrop: com.kyant.backdrop.Backdrop,
     authToken: String,
     viewModel: HomeViewModel = hiltViewModel()
 ) {
@@ -330,9 +347,17 @@ private fun FullScreenMenuOverlay(
 
     val employeeState by viewModel.employee.collectAsStateWithLifecycle()
 
-    Surface(
-        modifier = Modifier.fillMaxSize(),
-        color = MaterialTheme.colorScheme.background
+    Box(
+        modifier = Modifier
+            .fillMaxSize()
+            .glassPanel(
+                backdrop = backdrop,
+                shape = RoundedCornerShape(0.dp),
+                blurRadius = 24.dp,
+                fallbackColor = MaterialTheme.colorScheme.background,
+                borderWidth = 0.dp,
+                borderColor = Color.Transparent
+            )
     ) {
         BackHandler(onBack = onClose)
         Column(

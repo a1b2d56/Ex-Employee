@@ -70,6 +70,9 @@ dependencies {
     val composeBom = platform("androidx.compose:compose-bom:2025.05.01")
     implementation(composeBom)
 
+    // Backdrop (Liquid Glass effects)
+    implementation(libs.backdrop)
+
     // Compose core
     implementation(libs.androidx.compose.ui)
     implementation(libs.androidx.compose.ui.graphics)

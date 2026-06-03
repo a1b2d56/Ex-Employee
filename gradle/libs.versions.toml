@@ -1,5 +1,6 @@
 [versions]
 activityCompose = "1.13.0"
+backdrop = "2.0.0"
 biometric = "1.1.0"
 camera = "1.6.1"
 coilCompose = "2.7.0"
@@ -23,6 +24,7 @@ tensorflow = "2.17.0"
 tensorflowLiteSupport = "0.5.0"
 
 [libraries]
+backdrop = { group = "io.github.kyant0", name = "backdrop", version.ref = "backdrop" }
 androidx-activity-compose = { group = "androidx.activity", name = "activity-compose", version.ref = "activityCompose" }
 androidx-biometric = { group = "androidx.biometric", name = "biometric", version.ref = "biometric" }
 androidx-camera-camera2 = { group = "androidx.camera", name = "camera-camera2", version.ref = "camera" }

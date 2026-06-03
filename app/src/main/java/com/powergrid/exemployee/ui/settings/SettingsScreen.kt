@@ -53,6 +53,9 @@ import com.powergrid.exemployee.ui.theme.dynamic
 import com.powergrid.exemployee.common.ThemePrefs
 import com.powergrid.exemployee.security.BiometricResult
 import com.powergrid.exemployee.ui.components.SignOutDialog
+import com.powergrid.exemployee.ui.components.glassPanel
+import com.kyant.backdrop.backdrops.layerBackdrop
+import com.kyant.backdrop.backdrops.rememberLayerBackdrop
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -90,6 +93,15 @@ fun SettingsScreen(
         "manrope" to "Manrope"
     )
 
+    // Backdrop capture state for frosted glass on settings cards
+    val backdrop = rememberLayerBackdrop()
+
+    Box(
+        modifier = Modifier
+            .fillMaxSize()
+            .layerBackdrop(backdrop)
+    ) {
+
     LazyColumn(
         modifier = Modifier
             .fillMaxSize(),
@@ -103,10 +115,16 @@ fun SettingsScreen(
                 Card(
                     modifier = Modifier
                         .fillMaxWidth()
-                        .padding(horizontal = 16.dp, vertical = 8.dp),
+                        .padding(horizontal = 16.dp, vertical = 8.dp)
+                        .glassPanel(
+                            backdrop = backdrop,
+                            shape = RoundedCornerShape(18.dp),
+                            blurRadius = 12.dp,
+                            fallbackColor = MaterialTheme.colorScheme.surfaceContainerLow
+                        ),
                     shape = RoundedCornerShape(18.dp),
                     elevation = CardDefaults.cardElevation(defaultElevation = 0.dp),
-                    colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceContainerLow)
+                    colors = CardDefaults.cardColors(containerColor = Color.Transparent)
                 ) {
                 Column {
                     // Row 1: Signed In Status
@@ -175,10 +193,16 @@ fun SettingsScreen(
                 Card(
                     modifier = Modifier
                         .fillMaxWidth()
-                        .padding(horizontal = 16.dp, vertical = 8.dp),
+                        .padding(horizontal = 16.dp, vertical = 8.dp)
+                        .glassPanel(
+                            backdrop = backdrop,
+                            shape = RoundedCornerShape(18.dp),
+                            blurRadius = 12.dp,
+                            fallbackColor = MaterialTheme.colorScheme.surfaceContainerLow
+                        ),
                     shape = RoundedCornerShape(18.dp),
                     elevation = CardDefaults.cardElevation(defaultElevation = 0.dp),
-                    colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceContainerLow)
+                    colors = CardDefaults.cardColors(containerColor = Color.Transparent)
                 ) {
                 Column {
                     // Row 1: Theme
@@ -261,6 +285,8 @@ fun SettingsScreen(
 
 
     }
+
+    } // end Box(layerBackdrop)
 
     if (showSignOutDialog) {
         SignOutDialog(
