@@ -65,9 +65,9 @@ fun SettingsScreen(
     val activity = context as? FragmentActivity
 
     var showSignOutDialog by remember { mutableStateOf(false) }
-    var showThemeSheet by remember { mutableStateOf(false) }
+    var showThemeDialog by remember { mutableStateOf(false) }
 
-    var showFontFamilySheet by remember { mutableStateOf(false) }
+    var showFontFamilyDialog by remember { mutableStateOf(false) }
     
     var isBiometricEnabled by remember { mutableStateOf(viewModel.hasBiometricSecret()) }
     var currentTheme by remember { mutableStateOf(ThemePrefs.getTheme(context)) }
@@ -186,7 +186,7 @@ fun SettingsScreen(
                         subtitle = currentTheme.label,
                         iconRes = R.drawable.ic_palette,
                         iconColor = MaterialTheme.colorScheme.primary,
-                        modifier = Modifier.clickable { showThemeSheet = true }
+                        modifier = Modifier.clickable { showThemeDialog = true }
                     )
                     
                     HorizontalDivider(
@@ -227,7 +227,7 @@ fun SettingsScreen(
                          iconRes = R.drawable.ic_font_family,
                          iconColor = MaterialTheme.colorScheme.primary,
                          modifier = Modifier.clickable { 
-                             showFontFamilySheet = true
+                             showFontFamilyDialog = true
                          }
                     )
 
@@ -270,92 +270,90 @@ fun SettingsScreen(
         )
     }
 
-    if (showThemeSheet) {
-        ModalBottomSheet(
-            onDismissRequest = { showThemeSheet = false },
-            containerColor = MaterialTheme.colorScheme.surface
-        ) {
-            LazyColumn(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(bottom = 32.dp)
-            ) {
-                item {
-                    Text(
-                        text = "Choose Theme",
-                        style = MaterialTheme.typography.titleLarge,
-                        modifier = Modifier.padding(16.dp),
-                        fontWeight = FontWeight.Bold.dynamic()
-                    )
+    if (showThemeDialog) {
+        androidx.compose.material3.AlertDialog(
+            onDismissRequest = { showThemeDialog = false },
+            confirmButton = {
+                androidx.compose.material3.TextButton(onClick = { showThemeDialog = false }) {
+                    Text("Close")
                 }
-                items(ThemePrefs.AppTheme.entries.size) { index ->
-                    val theme = ThemePrefs.AppTheme.entries[index]
-                    Row(
-                        verticalAlignment = Alignment.CenterVertically,
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .clickable {
-                                currentTheme = theme
-                                ThemePrefs.setTheme(context, theme)
-                                showThemeSheet = false
-                            }
-                            .padding(horizontal = 16.dp, vertical = 12.dp)
-                    ) {
-                        RadioButton(
-                            selected = currentTheme == theme,
-                            onClick = null
-                        )
-                        Spacer(modifier = Modifier.width(16.dp))
-                        Text(text = theme.label, style = MaterialTheme.typography.bodyLarge)
+            },
+            title = {
+                Text(
+                    text = "Choose Theme",
+                    style = MaterialTheme.typography.titleLarge,
+                    fontWeight = FontWeight.Bold.dynamic()
+                )
+            },
+            text = {
+                LazyColumn(modifier = Modifier.fillMaxWidth()) {
+                    items(ThemePrefs.AppTheme.entries.size) { index ->
+                        val theme = ThemePrefs.AppTheme.entries[index]
+                        Row(
+                            verticalAlignment = Alignment.CenterVertically,
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .clickable {
+                                    currentTheme = theme
+                                    ThemePrefs.setTheme(context, theme)
+                                    showThemeDialog = false
+                                }
+                                .padding(vertical = 12.dp)
+                        ) {
+                            RadioButton(
+                                selected = currentTheme == theme,
+                                onClick = null
+                            )
+                            Spacer(modifier = Modifier.width(16.dp))
+                            Text(text = theme.label, style = MaterialTheme.typography.bodyLarge)
+                        }
                     }
                 }
             }
-        }
+        )
     }
 
-
-
-    if (showFontFamilySheet) {
-        ModalBottomSheet(
-            onDismissRequest = { showFontFamilySheet = false },
-            containerColor = MaterialTheme.colorScheme.surface
-        ) {
-            LazyColumn(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(bottom = 32.dp)
-            ) {
-                item {
-                    Text(
-                        text = "Choose Font Family",
-                        style = MaterialTheme.typography.titleLarge,
-                        modifier = Modifier.padding(16.dp),
-                        fontWeight = FontWeight.Bold.dynamic()
-                    )
+    if (showFontFamilyDialog) {
+        androidx.compose.material3.AlertDialog(
+            onDismissRequest = { showFontFamilyDialog = false },
+            confirmButton = {
+                androidx.compose.material3.TextButton(onClick = { showFontFamilyDialog = false }) {
+                    Text("Close")
                 }
-                items(fontFamilies.size) { index ->
-                    val (key, label) = fontFamilies[index]
-                    Row(
-                        verticalAlignment = Alignment.CenterVertically,
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .clickable {
-                                currentFontFamily = key
-                                FontPrefs.setFontFamily(context, key)
-                                showFontFamilySheet = false
-                            }
-                            .padding(horizontal = 16.dp, vertical = 12.dp)
-                    ) {
-                        RadioButton(
-                            selected = currentFontFamily == key,
-                            onClick = null
-                        )
-                        Spacer(modifier = Modifier.width(16.dp))
-                        Text(text = label, style = MaterialTheme.typography.bodyLarge)
+            },
+            title = {
+                Text(
+                    text = "Choose Font Family",
+                    style = MaterialTheme.typography.titleLarge,
+                    fontWeight = FontWeight.Bold.dynamic()
+                )
+            },
+            text = {
+                LazyColumn(modifier = Modifier.fillMaxWidth()) {
+                    items(fontFamilies.size) { index ->
+                        val (key, label) = fontFamilies[index]
+                        Row(
+                            verticalAlignment = Alignment.CenterVertically,
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .clickable {
+                                    currentFontFamily = key
+                                    FontPrefs.setFontFamily(context, key)
+                                    showFontFamilyDialog = false
+                                }
+                                .padding(vertical = 12.dp)
+                        ) {
+                            RadioButton(
+                                selected = currentFontFamily == key,
+                                onClick = null
+                            )
+                            Spacer(modifier = Modifier.width(16.dp))
+                            Text(text = label, style = MaterialTheme.typography.bodyLarge)
+                        }
                     }
                 }
             }
-        }
+        )
     }
 }
 
