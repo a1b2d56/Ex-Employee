@@ -1,10 +1,14 @@
 package com.powergrid.exemployee.ui.home
 
+import androidx.compose.animation.core.Animatable
+import androidx.compose.animation.core.FastOutSlowInEasing
+import androidx.compose.animation.core.tween
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.background
+import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
@@ -23,9 +27,11 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
@@ -52,6 +58,7 @@ import com.powergrid.exemployee.ui.theme.dynamic
 
 @Composable fun HomeScreen(
     authToken: String,
+    supportsGlass: Boolean = false,
     viewModel: HomeViewModel = hiltViewModel(),
 ) {
     val state by viewModel.employee.collectAsStateWithLifecycle()
@@ -68,22 +75,54 @@ import com.powergrid.exemployee.ui.theme.dynamic
                     .verticalScroll(rememberScrollState())
                     .padding(vertical = 16.dp),
             ) {
-                EmployeeCard(s.data)
+                EmployeeCard(s.data, supportsGlass)
             }
         }
     }
 }
 
-@Composable private fun EmployeeCard(employee: Employee) {
+@Composable private fun EmployeeCard(employee: Employee, supportsGlass: Boolean) {
+    val rotationY = remember(employee.employeeId) { Animatable(-180f) }
+    val elevation = remember(employee.employeeId) { Animatable(10f) }
+    val cardShape = RoundedCornerShape(18.dp)
+    val goldBrush = Brush.linearGradient(listOf(Color(0xFFE6C176), Color(0xFFC7983C)))
+    val glassGoldBrush = Brush.linearGradient(
+        listOf(
+            Color(0xFFF7DEA2).copy(alpha = 0.84f),
+            Color(0xFFE6C176).copy(alpha = 0.72f),
+            Color(0xFFC7983C).copy(alpha = 0.80f)
+        )
+    )
+
+    LaunchedEffect(employee.employeeId) {
+        rotationY.snapTo(-180f)
+        elevation.snapTo(10f)
+        rotationY.animateTo(0f, tween(durationMillis = 900, easing = FastOutSlowInEasing))
+        elevation.animateTo(2f, tween(durationMillis = 120, easing = FastOutSlowInEasing))
+        elevation.animateTo(5f, tween(durationMillis = 90, easing = FastOutSlowInEasing))
+        elevation.animateTo(2f, tween(durationMillis = 140, easing = FastOutSlowInEasing))
+    }
+
     Card(
-        modifier = Modifier.fillMaxWidth().padding(horizontal = 16.dp),
-        shape = RoundedCornerShape(18.dp),
-        elevation = CardDefaults.cardElevation(defaultElevation = 2.dp),
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(horizontal = 16.dp)
+            .graphicsLayer {
+                this.rotationY = rotationY.value
+                cameraDistance = 12f * density
+            },
+        shape = cardShape,
+        elevation = CardDefaults.cardElevation(defaultElevation = elevation.value.dp),
         colors = CardDefaults.cardColors(containerColor = Color.Transparent),
     ) {
         Column(
             modifier = Modifier
-                .background(Brush.linearGradient(listOf(Color(0xFFE6C176), Color(0xFFC7983C))))
+                .background(if (supportsGlass) glassGoldBrush else goldBrush)
+                .border(
+                    width = 1.dp,
+                    color = Color.White.copy(alpha = if (supportsGlass) 0.34f else 0f),
+                    shape = cardShape
+                )
                 .padding(horizontal = 24.dp, vertical = 32.dp),
             horizontalAlignment = Alignment.CenterHorizontally,
         ) {

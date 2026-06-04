@@ -22,6 +22,7 @@ securityCrypto = "1.1.0"
 tensorflow = "2.17.0"
 tensorflowLiteSupport = "0.5.0"
 
+
 [libraries]
 androidx-activity-compose = { group = "androidx.activity", name = "activity-compose", version.ref = "activityCompose" }
 androidx-biometric = { group = "androidx.biometric", name = "biometric", version.ref = "biometric" }

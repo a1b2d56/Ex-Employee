@@ -1,8 +1,11 @@
 package com.powergrid.exemployee.ui.main
 
+import android.os.Build
 import androidx.activity.compose.BackHandler
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.animateColor
+import androidx.compose.animation.core.Spring
+import androidx.compose.animation.core.animateDpAsState
 import androidx.compose.animation.core.animateFloat
 import androidx.compose.animation.core.spring
 import androidx.compose.animation.core.updateTransition
@@ -31,6 +34,7 @@ import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.BlendMode
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.graphics.graphicsLayer
@@ -50,10 +54,6 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.draw.shadow
-import coil.compose.AsyncImage
-import androidx.compose.material.icons.outlined.Person
-import com.powergrid.exemployee.ui.theme.dynamic
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.powergrid.exemployee.common.UiState
@@ -79,6 +79,7 @@ fun MainScreen(
 
     var isMenuOpen by remember { mutableStateOf(false) }
     var showSignOutDialog by remember { mutableStateOf(false) }
+    val supportsGlass = Build.VERSION.SDK_INT >= Build.VERSION_CODES.S
 
     Box(modifier = Modifier.fillMaxSize()) {
         Scaffold(
@@ -128,28 +129,26 @@ fun MainScreen(
                             val isBold = com.powergrid.exemployee.ui.theme.LocalIsBold.current
                             val fontScales = listOf(0.85f, 1.0f, 1.15f, 1.3f)
                             
-                            IconButton(onClick = {
+                            GlassTopIconButton(
+                                onClick = {
                                 val currentScale = FontPrefs.getScale(context)
                                 val nextIdx = (fontScales.indexOf(currentScale).coerceAtLeast(0) + 1) % fontScales.size
                                 FontPrefs.setScale(context, fontScales[nextIdx])
-                            }) {
-                                Icon(
-                                    painter = painterResource(id = R.drawable.ic_font_size),
-                                    contentDescription = "Toggle Font Size",
-                                    modifier = Modifier.size(24.dp)
-                                )
-                            }
-                            
-                            IconButton(onClick = {
-                                FontPrefs.setBold(context, !isBold)
-                            }) {
-                                Icon(
-                                    painter = painterResource(id = R.drawable.ic_format_bold),
-                                    contentDescription = "Toggle Bold Text",
-                                    modifier = Modifier.size(24.dp),
-                                    tint = if (isBold) MaterialTheme.colorScheme.primary else LocalContentColor.current
-                                )
-                            }
+                                },
+                                iconRes = R.drawable.ic_font_size,
+                                contentDescription = "Toggle Font Size",
+                                supportsGlass = supportsGlass
+                            )
+
+                            GlassTopIconButton(
+                                onClick = {
+                                    FontPrefs.setBold(context, !isBold)
+                                },
+                                iconRes = R.drawable.ic_format_bold,
+                                contentDescription = "Toggle Bold Text",
+                                supportsGlass = supportsGlass,
+                                selected = isBold
+                            )
                         }
                     },
                     colors = TopAppBarDefaults.centerAlignedTopAppBarColors(
@@ -161,26 +160,81 @@ fun MainScreen(
                 )
             },
             bottomBar = {
-                // Telegram-style floating bottom capsule
+                val navGlassTint = MaterialTheme.colorScheme.surfaceContainer
+                val selectedGlassTint = MaterialTheme.colorScheme.primary
+                val selectedNavIndex = if (isMenuOpen) {
+                    4
+                } else if (currentRoute == Screen.Home.route) {
+                    pagerState.currentPage
+                } else {
+                    -1
+                }
+
+                val navModifier = Modifier
+                    .fillMaxWidth()
+                    .padding(horizontal = 20.dp)
+                    .padding(bottom = 20.dp)
+                    .navigationBarsPadding()
+
+                // Telegram-style floating bottom capsule with Android 12+ glass fallback.
                 Surface(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(horizontal = 20.dp)
-                        .padding(bottom = 20.dp)
-                        .navigationBarsPadding(),
+                    modifier = navModifier.border(
+                        width = 1.dp,
+                        color = Color.White.copy(alpha = if (supportsGlass) 0.28f else 0f),
+                        shape = CircleShape
+                    ),
                     shape = CircleShape,
-                    color = MaterialTheme.colorScheme.surfaceContainer,
+                    color = if (supportsGlass) navGlassTint.copy(alpha = 0.62f) else MaterialTheme.colorScheme.surfaceContainerHigh,
                     tonalElevation = 8.dp,
                     shadowElevation = 10.dp
                 ) {
-                    Row(
+                    BoxWithConstraints(
                         modifier = Modifier
                             .fillMaxWidth()
                             .height(68.dp)
                             .padding(horizontal = 4.dp),
-                        verticalAlignment = Alignment.CenterVertically,
-                        horizontalArrangement = Arrangement.SpaceEvenly
+                        contentAlignment = Alignment.CenterStart
                     ) {
+                        val itemWidth = maxWidth / 5
+                        val dropOffset by animateDpAsState(
+                            targetValue = itemWidth * selectedNavIndex.coerceAtLeast(0).toFloat(),
+                            animationSpec = spring(
+                                dampingRatio = 0.62f,
+                                stiffness = Spring.StiffnessLow
+                            ),
+                            label = "NavGlassDropOffset"
+                        )
+
+                        if (selectedNavIndex >= 0) {
+                            val dropShape = RoundedCornerShape(percent = 50)
+                            val dropModifier = Modifier
+                                .offset(x = dropOffset + 3.dp)
+                                .size(width = itemWidth - 6.dp, height = 58.dp)
+
+                            Box(
+                                modifier = dropModifier
+                                    .graphicsLayer {
+                                        scaleX = if (supportsGlass) 1.08f else 1f
+                                        scaleY = if (supportsGlass) 0.96f else 1f
+                                    }
+                                    .clip(dropShape)
+                                    .background(
+                                        if (supportsGlass) selectedGlassTint.copy(alpha = 0.72f)
+                                        else selectedGlassTint
+                                    )
+                                    .border(
+                                        width = 1.dp,
+                                        color = Color.White.copy(alpha = if (supportsGlass) 0.22f else 0f),
+                                        shape = dropShape
+                                    )
+                            )
+                        }
+
+                        Row(
+                            modifier = Modifier.fillMaxSize(),
+                            verticalAlignment = Alignment.CenterVertically,
+                            horizontalArrangement = Arrangement.SpaceEvenly
+                        ) {
                         val bottomItems = listOf(
                             Triple(Screen.Home, "Home", R.drawable.ic_nav_home) to 0,
                             Triple(Screen.Home, "Notices", R.drawable.ic_nav_noticeboard) to 1,
@@ -224,35 +278,45 @@ fun MainScreen(
                             },
                             modifier = Modifier.weight(1f)
                         )
+                        }
                     }
                 }
             }
         ) { padding ->
-            AppNavHost(
-                navController = navController,
-                pagerState = pagerState,
-                authToken = authToken,
-                onSignOut = onSignOut,
-                modifier = Modifier.padding(padding)
-            )
-        }
+            Box(
+                modifier = Modifier
+                    .fillMaxSize()
+                    .padding(
+                        top = padding.calculateTopPadding(),
+                        bottom = padding.calculateBottomPadding()
+                    )
+            ) {
+                AppNavHost(
+                    navController = navController,
+                    pagerState = pagerState,
+                    authToken = authToken,
+                    onSignOut = onSignOut,
+                    supportsGlass = supportsGlass,
+                    modifier = Modifier.fillMaxSize()
+                )
 
-        // Full Screen Menu Overlay
-        AnimatedVisibility(
-            visible = isMenuOpen,
-            enter = fadeIn(animationSpec = spring()) + scaleIn(initialScale = 0.95f),
-            exit = fadeOut(animationSpec = spring()) + scaleOut(targetScale = 0.95f)
-        ) {
-            FullScreenMenuOverlay(
-                navController = navController,
-                pagerState = pagerState,
-                scope = scope,
-                onClose = { isMenuOpen = false },
-                onSignOutClick = {
-                    showSignOutDialog = true
-                },
-                authToken = authToken
-            )
+                AnimatedVisibility(
+                    visible = isMenuOpen,
+                    enter = fadeIn(animationSpec = spring()) + scaleIn(initialScale = 0.95f),
+                    exit = fadeOut(animationSpec = spring()) + scaleOut(targetScale = 0.95f)
+                ) {
+                    FullScreenMenuOverlay(
+                        navController = navController,
+                        pagerState = pagerState,
+                        scope = scope,
+                        onClose = { isMenuOpen = false },
+                        onSignOutClick = {
+                            showSignOutDialog = true
+                        },
+                        authToken = authToken
+                    )
+                }
+            }
         }
 
         if (showSignOutDialog) {
@@ -269,6 +333,56 @@ fun MainScreen(
 }
 
 @Composable
+private fun GlassTopIconButton(
+    onClick: () -> Unit,
+    iconRes: Int,
+    contentDescription: String,
+    supportsGlass: Boolean,
+    selected: Boolean = false
+) {
+    val tint = if (selected) MaterialTheme.colorScheme.primary else LocalContentColor.current
+    val surfaceColor = MaterialTheme.colorScheme.surfaceContainerHighest.copy(
+        alpha = if (supportsGlass) 0.46f else 1f
+    )
+    val borderColor = Color.White.copy(alpha = if (supportsGlass) 0.32f else 0f)
+    val selectedColor = MaterialTheme.colorScheme.primary.copy(alpha = 0.18f)
+
+    if (!supportsGlass) {
+        IconButton(onClick = onClick) {
+            Icon(
+                painter = painterResource(id = iconRes),
+                contentDescription = contentDescription,
+                modifier = Modifier.size(24.dp),
+                tint = tint
+            )
+        }
+        return
+    }
+
+    Box(
+        modifier = Modifier
+            .padding(horizontal = 2.dp)
+            .size(42.dp)
+            .clip(CircleShape)
+            .background(if (selected) selectedColor else surfaceColor)
+            .border(1.dp, borderColor, CircleShape)
+            .clickable(
+                interactionSource = remember { MutableInteractionSource() },
+                indication = null,
+                onClick = onClick
+            ),
+        contentAlignment = Alignment.Center
+    ) {
+        Icon(
+            painter = painterResource(id = iconRes),
+            contentDescription = contentDescription,
+            modifier = Modifier.size(22.dp),
+            tint = tint
+        )
+    }
+}
+
+@Composable
 private fun FloatingNavItem(
     selected: Boolean,
     onClick: () -> Unit,
@@ -278,7 +392,7 @@ private fun FloatingNavItem(
 ) {
     val transition = updateTransition(targetState = selected, label = "NavItemTransition")
     val tint by transition.animateColor(label = "iconTint") { isSelected ->
-        if (isSelected) MaterialTheme.colorScheme.primary else MaterialTheme.colorScheme.onSurfaceVariant
+        if (isSelected) MaterialTheme.colorScheme.onPrimary else MaterialTheme.colorScheme.onSurfaceVariant
     }
     val scale by transition.animateFloat(label = "iconScale") { isSelected ->
         if (isSelected) 1.12f else 1.0f
@@ -342,9 +456,7 @@ private fun FullScreenMenuOverlay(
         BackHandler(onBack = onClose)
         Column(
             modifier = Modifier
-                .fillMaxSize()
-                .statusBarsPadding()
-                .navigationBarsPadding(),
+                .fillMaxSize(),
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
 

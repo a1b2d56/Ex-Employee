@@ -75,6 +75,7 @@ dependencies {
     implementation(libs.androidx.compose.animation)
     implementation(libs.androidx.compose.ui.tooling.preview)
     debugImplementation(libs.androidx.compose.ui.tooling)
+    implementation("io.github.kyant0:backdrop:2.0.0")
 
     // AndroidX — Compose integration
     implementation(libs.androidx.activity.compose)
