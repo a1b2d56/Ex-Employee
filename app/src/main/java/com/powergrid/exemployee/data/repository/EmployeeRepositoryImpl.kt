@@ -5,6 +5,7 @@ import com.powergrid.exemployee.common.UiState
 
 import com.powergrid.exemployee.data.remote.model.EmployeeMockContainer
 import com.powergrid.exemployee.domain.model.*
+import com.powergrid.exemployee.domain.repository.AppData
 import com.powergrid.exemployee.domain.repository.EmployeeRepository
 import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.serialization.json.Json
@@ -19,23 +20,24 @@ class EmployeeRepositoryImpl @Inject constructor(
 ) : EmployeeRepository {
 
     private val json = Json { ignoreUnknownKeys = true }
-    private var cachedMockData: EmployeeMockContainer? = null
 
-    private fun loadMockData(): EmployeeMockContainer {
-        cachedMockData?.let { return it }
-        val open = context.assets.open("mock/employee_mock.json")
-        val reader = BufferedReader(InputStreamReader(open, "UTF-8"))
-        val content = reader.use { it.readText() }
-        val data = json.decodeFromString<EmployeeMockContainer>(content)
-        cachedMockData = data
-        return data
-    }
+    // ── Cached data from the single "getAllData" call ──
+    private var cachedAppData: AppData? = null
 
-    override suspend fun getEmployeeInfo(token: String): UiState<Employee> = safeCall {
+    /**
+     * Single API call that fetches everything.
+     * For now it reads from mock JSON assets.
+     */
+    override suspend fun getAllData(token: String): UiState<AppData> = safeCall {
         if (token.isBlank()) return@safeCall UiState.Error("Invalid token")
-        val container = loadMockData()
-        val d = container.employee
-        UiState.Success(
+
+        // Return cached data if available
+        cachedAppData?.let { return@safeCall UiState.Success(it) }
+
+        // Load employee + family + docs from mock
+        val container = loadMockContainer()
+
+        val employee = container.employee.let { d ->
             Employee(
                 employeeId = d.employeeId,
                 name = d.name,
@@ -46,36 +48,23 @@ class EmployeeRepositoryImpl @Inject constructor(
                 email = d.email,
                 photo = d.photo ?: d.photoUrl
             )
-        )
-    }
+        }
 
-    override suspend fun getNotices(token: String): UiState<List<Notice>> = safeCall {
-        if (token.isBlank()) return@safeCall UiState.Error("Invalid token")
-        val open = context.assets.open("mock/notices_mock.json")
-        val reader = BufferedReader(InputStreamReader(open, "UTF-8"))
-        val content = reader.use { it.readText() }
-        val list = json.decodeFromString<List<com.powergrid.exemployee.data.remote.model.NoticeResponse>>(content)
-        val notices = list.map { d ->
-            Notice(
-                id = d.id,
-                title = d.title,
-                content = d.content,
-                date = d.date,
-                urgent = d.urgent,
-                pdfPath = d.pdfPath
+        val family = container.family.map { d ->
+            FamilyMember(
+                name = d.name,
+                age = d.age,
+                dob = d.dob,
+                photo = d.photo,
+                relation = d.relation
             )
         }
-        UiState.Success(notices)
-    }
 
-    override suspend fun getDependants(token: String): UiState<List<Dependant>> = safeCall {
-        if (token.isBlank()) return@safeCall UiState.Error("Invalid token")
-        val container = loadMockData()
-        val list = container.family.mapIndexed { index, d ->
+        val dependants = container.family.mapIndexed { index, d ->
             val statusStr = when (index) {
                 0 -> "Needs verification"
                 1 -> "In process"
-                else -> "No need to update"
+                else -> "Updated"
             }
             Dependant(
                 id = d.name,
@@ -83,16 +72,15 @@ class EmployeeRepositoryImpl @Inject constructor(
                 relation = d.relation,
                 age = d.age,
                 dob = d.dob,
-                status = statusStr
+                status = statusStr,
+                photoUrl = d.photo
             )
         }
-        UiState.Success(list)
-    }
 
-    override suspend fun getVerificationItems(token: String): UiState<List<VerificationDoc>> = safeCall {
-        if (token.isBlank()) return@safeCall UiState.Error("Invalid token")
-        val container = loadMockData()
-        val list = container.certificateStatus.map { d ->
+        // Load notices from separate mock file
+        val notices = loadNoticesMock()
+
+        val verificationDocs = container.certificateStatus.map { d ->
             val statusStr = when (d.status) {
                 2 -> "verified"
                 1 -> "pending"
@@ -109,22 +97,99 @@ class EmployeeRepositoryImpl @Inject constructor(
                 remarks = remarks
             )
         }
-        UiState.Success(list)
+
+        val appData = AppData(
+            employee = employee,
+            family = family,
+            dependants = dependants,
+            notices = notices,
+            verificationDocs = verificationDocs
+        )
+        cachedAppData = appData
+        UiState.Success(appData)
     }
 
-    override suspend fun getFamilyMembers(token: String): UiState<List<FamilyMember>> = safeCall {
-        if (token.isBlank()) return@safeCall UiState.Error("Invalid token")
-        val container = loadMockData()
-        val list = container.family.map { d ->
-            FamilyMember(
-                name = d.name,
-                age = d.age,
-                dob = d.dob,
-                photo = d.photo,
-                relation = d.relation
+    // ── Convenience accessors — all read from cached AppData ──
+
+    override suspend fun getEmployeeInfo(token: String): UiState<Employee> {
+        val result = getAllData(token)
+        return when (result) {
+            is UiState.Success -> UiState.Success(result.data.employee)
+            is UiState.Error -> UiState.Error(result.message)
+            is UiState.Loading -> UiState.Loading
+            is UiState.Idle -> UiState.Idle
+        }
+    }
+
+    override suspend fun getNotices(token: String): UiState<List<Notice>> {
+        val result = getAllData(token)
+        return when (result) {
+            is UiState.Success -> UiState.Success(result.data.notices)
+            is UiState.Error -> UiState.Error(result.message)
+            is UiState.Loading -> UiState.Loading
+            is UiState.Idle -> UiState.Idle
+        }
+    }
+
+    override suspend fun getDependants(token: String): UiState<List<Dependant>> {
+        val result = getAllData(token)
+        return when (result) {
+            is UiState.Success -> UiState.Success(result.data.dependants)
+            is UiState.Error -> UiState.Error(result.message)
+            is UiState.Loading -> UiState.Loading
+            is UiState.Idle -> UiState.Idle
+        }
+    }
+
+    override suspend fun getVerificationItems(token: String): UiState<List<VerificationDoc>> {
+        val result = getAllData(token)
+        return when (result) {
+            is UiState.Success -> UiState.Success(result.data.verificationDocs)
+            is UiState.Error -> UiState.Error(result.message)
+            is UiState.Loading -> UiState.Loading
+            is UiState.Idle -> UiState.Idle
+        }
+    }
+
+    override suspend fun getFamilyMembers(token: String): UiState<List<FamilyMember>> {
+        val result = getAllData(token)
+        return when (result) {
+            is UiState.Success -> UiState.Success(result.data.family)
+            is UiState.Error -> UiState.Error(result.message)
+            is UiState.Loading -> UiState.Loading
+            is UiState.Idle -> UiState.Idle
+        }
+    }
+
+    // ── Private helpers ──
+
+    private var cachedMockContainer: EmployeeMockContainer? = null
+
+    private fun loadMockContainer(): EmployeeMockContainer {
+        cachedMockContainer?.let { return it }
+        val open = context.assets.open("mock/employee_mock.json")
+        val reader = BufferedReader(InputStreamReader(open, "UTF-8"))
+        val content = reader.use { it.readText() }
+        val data = json.decodeFromString<EmployeeMockContainer>(content)
+        cachedMockContainer = data
+        return data
+    }
+
+    private fun loadNoticesMock(): List<Notice> {
+        val open = context.assets.open("mock/notices_mock.json")
+        val reader = BufferedReader(InputStreamReader(open, "UTF-8"))
+        val content = reader.use { it.readText() }
+        val list = json.decodeFromString<List<com.powergrid.exemployee.data.remote.model.NoticeResponse>>(content)
+        return list.map { d ->
+            Notice(
+                id = d.id,
+                title = d.title,
+                content = d.content,
+                date = d.date,
+                urgent = d.urgent,
+                pdfPath = d.pdfPath
             )
         }
-        UiState.Success(list)
     }
 }
 

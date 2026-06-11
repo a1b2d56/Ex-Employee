@@ -112,7 +112,7 @@ private fun CardSelectionView(
         
         LazyColumn(
             modifier = Modifier.fillMaxWidth(),
-            contentPadding = PaddingValues(horizontal = 16.dp, vertical = 24.dp),
+            contentPadding = PaddingValues(start = 16.dp, end = 16.dp, top = 24.dp, bottom = 100.dp),
             verticalArrangement = Arrangement.spacedBy(16.dp)
         ) {
             items(cardItems) { card ->
@@ -142,11 +142,12 @@ private fun LivelinessCardRow(
                 .padding(16.dp),
             verticalAlignment = Alignment.CenterVertically
         ) {
-            // Blue outlined circle
-            Box(
-                modifier = Modifier
-                    .size(52.dp)
-                    .border(2.dp, MaterialTheme.colorScheme.primary, CircleShape)
+            // Profile picture
+            com.powergrid.exemployee.ui.components.ProfileAvatar(
+                photoUrl = card.photo,
+                size = 52.dp,
+                shadowElevation = 0.dp,
+                borderWidth = 1.5.dp
             )
             
             Spacer(modifier = Modifier.width(16.dp))

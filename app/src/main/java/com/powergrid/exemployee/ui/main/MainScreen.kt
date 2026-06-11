@@ -1,5 +1,6 @@
 package com.powergrid.exemployee.ui.main
 
+import android.os.Build
 import androidx.activity.compose.BackHandler
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.animateColor
@@ -14,6 +15,7 @@ import androidx.compose.animation.slideInHorizontally
 import androidx.compose.animation.slideOutHorizontally
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.background
+import androidx.compose.foundation.border
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import com.powergrid.exemployee.common.FontPrefs
 import androidx.compose.material3.LocalContentColor
@@ -81,6 +83,7 @@ fun MainScreen(
 
     Box(modifier = Modifier.fillMaxSize()) {
         Scaffold(
+            contentWindowInsets = WindowInsets(0),
             topBar = {
                 val title = if (currentRoute == Screen.Home.route) {
                     when (pagerState.currentPage) {
@@ -127,28 +130,28 @@ fun MainScreen(
                             val isBold = com.powergrid.exemployee.ui.theme.LocalIsBold.current
                             val fontScales = listOf(0.85f, 1.0f, 1.15f, 1.3f)
                             
-                            IconButton(onClick = {
-                                val currentScale = FontPrefs.getScale(context)
-                                val nextIdx = (fontScales.indexOf(currentScale).coerceAtLeast(0) + 1) % fontScales.size
-                                FontPrefs.setScale(context, fontScales[nextIdx])
-                            }) {
-                                Icon(
-                                    painter = painterResource(id = R.drawable.ic_font_size),
-                                    contentDescription = "Toggle Font Size",
-                                    modifier = Modifier.size(24.dp)
-                                )
-                            }
+                            val supportsGlass = Build.VERSION.SDK_INT >= Build.VERSION_CODES.S
                             
-                            IconButton(onClick = {
-                                FontPrefs.setBold(context, !isBold)
-                            }) {
-                                Icon(
-                                    painter = painterResource(id = R.drawable.ic_format_bold),
-                                    contentDescription = "Toggle Bold Text",
-                                    modifier = Modifier.size(24.dp),
-                                    tint = if (isBold) MaterialTheme.colorScheme.primary else LocalContentColor.current
-                                )
-                            }
+                            GlassTopIconButton(
+                                onClick = {
+                                    val currentScale = FontPrefs.getScale(context)
+                                    val nextIdx = (fontScales.indexOf(currentScale).coerceAtLeast(0) + 1) % fontScales.size
+                                    FontPrefs.setScale(context, fontScales[nextIdx])
+                                },
+                                iconRes = R.drawable.ic_font_size,
+                                contentDescription = "Toggle Font Size",
+                                supportsGlass = supportsGlass
+                            )
+                            
+                            GlassTopIconButton(
+                                onClick = {
+                                    FontPrefs.setBold(context, !isBold)
+                                },
+                                iconRes = R.drawable.ic_format_bold,
+                                contentDescription = "Toggle Bold Text",
+                                supportsGlass = supportsGlass,
+                                selected = isBold
+                            )
                         }
                     },
                     colors = TopAppBarDefaults.topAppBarColors(
@@ -173,7 +176,7 @@ fun MainScreen(
                     onSignOut = onSignOut,
                     modifier = Modifier
                         .fillMaxSize()
-                        .padding(top = padding.calculateTopPadding(), bottom = 88.dp)
+                        .padding(top = padding.calculateTopPadding())
                 )
             }
         }
@@ -209,7 +212,8 @@ fun MainScreen(
                     backdrop = backdrop,
                     shape = CircleShape,
                     blurRadius = 16.dp,
-                    fallbackColor = MaterialTheme.colorScheme.surfaceContainer
+                    tintColor = MaterialTheme.colorScheme.tertiary.copy(alpha = 0.25f),
+                    fallbackColor = MaterialTheme.colorScheme.tertiaryContainer
                 )
         ) {
             Row(
@@ -276,6 +280,56 @@ fun MainScreen(
                 }
             )
         }
+    }
+}
+
+@Composable
+private fun GlassTopIconButton(
+    onClick: () -> Unit,
+    iconRes: Int,
+    contentDescription: String,
+    supportsGlass: Boolean,
+    selected: Boolean = false
+) {
+    val tint = if (selected) MaterialTheme.colorScheme.primary else LocalContentColor.current
+    val surfaceColor = MaterialTheme.colorScheme.surfaceContainerHighest.copy(
+        alpha = if (supportsGlass) 0.46f else 1f
+    )
+    val borderColor = Color.White.copy(alpha = if (supportsGlass) 0.32f else 0f)
+    val selectedColor = MaterialTheme.colorScheme.primary.copy(alpha = 0.18f)
+
+    if (!supportsGlass) {
+        IconButton(onClick = onClick) {
+            Icon(
+                painter = painterResource(id = iconRes),
+                contentDescription = contentDescription,
+                modifier = Modifier.size(24.dp),
+                tint = tint
+            )
+        }
+        return
+    }
+
+    Box(
+        modifier = Modifier
+            .padding(horizontal = 2.dp)
+            .size(42.dp)
+            .clip(CircleShape)
+            .background(if (selected) selectedColor else surfaceColor)
+            .border(1.dp, borderColor, CircleShape)
+            .clickable(
+                interactionSource = remember { MutableInteractionSource() },
+                indication = null,
+                onClick = onClick
+            ),
+        contentAlignment = Alignment.Center
+    ) {
+        Icon(
+            painter = painterResource(id = iconRes),
+            contentDescription = contentDescription,
+            modifier = Modifier.size(22.dp),
+            tint = tint
+        )
     }
 }
 
@@ -350,14 +404,7 @@ private fun FullScreenMenuOverlay(
     Box(
         modifier = Modifier
             .fillMaxSize()
-            .glassPanel(
-                backdrop = backdrop,
-                shape = RoundedCornerShape(0.dp),
-                blurRadius = 24.dp,
-                fallbackColor = MaterialTheme.colorScheme.background,
-                borderWidth = 0.dp,
-                borderColor = Color.Transparent
-            )
+            .background(MaterialTheme.colorScheme.background)
     ) {
         BackHandler(onBack = onClose)
         Column(

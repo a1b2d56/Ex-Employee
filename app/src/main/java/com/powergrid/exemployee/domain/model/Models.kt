@@ -57,6 +57,6 @@ data class FamilyMember(
     val relation: String
 )
 
-data class Dependant(val id: String, val name: String, val relation: String, val age: Int, val dob: String, val status: String)
+data class Dependant(val id: String, val name: String, val relation: String, val age: Int, val dob: String, val status: String, val photoUrl: String? = null)
 
 data class VerificationDoc(val id: String, val docType: String, val status: String, val verifiedOn: String?, val remarks: String?)

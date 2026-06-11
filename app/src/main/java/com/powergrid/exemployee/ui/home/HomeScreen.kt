@@ -4,6 +4,9 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.animation.core.Animatable
+import androidx.compose.animation.core.FastOutSlowInEasing
+import androidx.compose.animation.core.tween
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -19,6 +22,7 @@ import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.remember
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
@@ -34,6 +38,7 @@ import com.powergrid.exemployee.ui.components.LoadingIndicator
 import com.powergrid.exemployee.ui.components.ProfileAvatar
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.graphics.Brush
+import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.graphics.Color
 import com.powergrid.exemployee.ui.theme.dynamic
 
@@ -53,7 +58,7 @@ import com.powergrid.exemployee.ui.theme.dynamic
                 modifier = Modifier
                     .fillMaxSize()
                     .verticalScroll(rememberScrollState())
-                    .padding(vertical = 16.dp),
+                    .padding(top = 16.dp, bottom = 100.dp),
             ) {
                 EmployeeCard(s.data)
             }
@@ -62,10 +67,29 @@ import com.powergrid.exemployee.ui.theme.dynamic
 }
 
 @Composable private fun EmployeeCard(employee: Employee) {
+    val rotationY = remember(employee.employeeId) { Animatable(-180f) }
+    val elevation = remember(employee.employeeId) { Animatable(10f) }
+    val cardShape = RoundedCornerShape(18.dp)
+
+    LaunchedEffect(employee.employeeId) {
+        rotationY.snapTo(-180f)
+        elevation.snapTo(10f)
+        rotationY.animateTo(0f, tween(durationMillis = 900, easing = FastOutSlowInEasing))
+        elevation.animateTo(2f, tween(durationMillis = 120, easing = FastOutSlowInEasing))
+        elevation.animateTo(5f, tween(durationMillis = 90, easing = FastOutSlowInEasing))
+        elevation.animateTo(2f, tween(durationMillis = 140, easing = FastOutSlowInEasing))
+    }
+
     Card(
-        modifier = Modifier.fillMaxWidth().padding(horizontal = 16.dp),
-        shape = RoundedCornerShape(18.dp),
-        elevation = CardDefaults.cardElevation(defaultElevation = 2.dp),
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(horizontal = 16.dp)
+            .graphicsLayer {
+                this.rotationY = rotationY.value
+                cameraDistance = 12f * density
+            },
+        shape = cardShape,
+        elevation = CardDefaults.cardElevation(defaultElevation = elevation.value.dp),
         colors = CardDefaults.cardColors(containerColor = Color.Transparent),
     ) {
         Column(

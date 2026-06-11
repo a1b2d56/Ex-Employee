@@ -44,8 +44,18 @@ fun ProfileAvatar(
         contentAlignment = Alignment.Center
     ) {
         if (!photoUrl.isNullOrEmpty()) {
+            // Convert asset-relative paths (e.g. "mock_images/photo.png") to Coil-friendly URIs
+            val imageModel = if (
+                photoUrl.startsWith("http") ||
+                photoUrl.startsWith("content://") ||
+                photoUrl.startsWith("file://")
+            ) {
+                photoUrl
+            } else {
+                "file:///android_asset/$photoUrl"
+            }
             AsyncImage(
-                model = photoUrl,
+                model = imageModel,
                 contentDescription = "Profile Picture",
                 modifier = Modifier.fillMaxSize(),
                 contentScale = ContentScale.Crop

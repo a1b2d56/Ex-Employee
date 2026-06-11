@@ -28,6 +28,7 @@ import com.kyant.backdrop.effects.vibrancy
  * @param backdrop      The [Backdrop] instance created via `rememberLayerBackdrop()`.
  * @param shape         The clipping shape for the glass panel (e.g. CircleShape, RoundedCornerShape).
  * @param blurRadius    The blur radius in dp. Higher values produce a stronger frosted effect.
+ * @param tintColor     A translucent color overlay to apply on top of the frosted glass (e.g., Color.White.copy(alpha=0.4f)).
  * @param fallbackColor Solid color used on pre-API-31 devices.
  * @param borderColor   Optional border color for a thin highlight ring.
  * @param borderWidth   Width of the highlight border.
@@ -37,13 +38,14 @@ fun Modifier.glassPanel(
     backdrop: Backdrop,
     shape: Shape = RoundedCornerShape(18.dp),
     blurRadius: Dp = 16.dp,
+    tintColor: Color = Color.White.copy(alpha = 0.4f),
     fallbackColor: Color = Color(0xFFD2E2F2),
     borderColor: Color = Color.White.copy(alpha = 0.18f),
     borderWidth: Dp = 0.5.dp
 ): Modifier {
     val density = LocalDensity.current
     return if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
-        // API 31+ : real backdrop blur
+        // API 31+ : real backdrop blur + translucent tint overlay
         this
             .drawBackdrop(
                 backdrop = backdrop,
@@ -53,6 +55,7 @@ fun Modifier.glassPanel(
                     blur(with(density) { blurRadius.toPx() })
                 }
             )
+            .background(tintColor, shape)
             .border(borderWidth, borderColor, shape)
     } else {
         // Pre-Android 12 : solid fallback
