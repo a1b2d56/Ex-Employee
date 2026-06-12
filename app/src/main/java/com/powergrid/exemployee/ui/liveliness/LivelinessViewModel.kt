@@ -105,16 +105,11 @@ class LivelinessViewModel @Inject constructor(
                             photo = employee.photo,
                             dob = employee.dob,
                             age = calculateAge(employee.dob),
-                            status = 2
+                            status = employee.livelinessStatus
                         )
                     )
-                    // Family members mapped to card items with status based on index
-                    familyMembers.forEachIndexed { index, member ->
-                        val status = when (index) {
-                            0 -> 2
-                            1 -> 1
-                            else -> 0
-                        }
+                    // Family members mapped to card items with status from API
+                    familyMembers.forEach { member ->
                         list.add(
                             LivelinessCardItem(
                                 id = member.name,
@@ -123,7 +118,7 @@ class LivelinessViewModel @Inject constructor(
                                 photo = member.photo,
                                 dob = member.dob,
                                 age = member.age.toString(),
-                                status = status
+                                status = member.livelinessStatus
                             )
                         )
                     }

@@ -55,6 +55,16 @@ import com.powergrid.exemployee.ui.components.LoadingIndicator
 import com.powergrid.exemployee.ui.components.ProfileAvatar
 import com.powergrid.exemployee.ui.theme.dynamic
 
+import androidx.activity.compose.rememberLauncherForActivityResult
+import androidx.activity.result.contract.ActivityResultContracts
+import android.net.Uri
+import android.widget.Toast
+import androidx.compose.ui.platform.LocalContext
+import androidx.compose.material3.OutlinedButton
+import androidx.compose.material3.Button
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.setValue
+
 @Composable fun DependantsScreen(
     authToken: String,
     viewModel: DependantsViewModel = hiltViewModel(),
@@ -85,7 +95,7 @@ import com.powergrid.exemployee.ui.theme.dynamic
                         selfStatus = selfStatus,
                         isExpanded = state.expandedCardId == "self",
                         onToggle = { viewModel.toggleExpand("self") },
-                        verificationDocs = state.verificationDocs,
+                        onUpload = { photo, doc -> viewModel.uploadDocuments(photo.toString(), doc.toString()) }
                     )
                 }
 
@@ -95,7 +105,7 @@ import com.powergrid.exemployee.ui.theme.dynamic
                         dependant = dependant,
                         isExpanded = state.expandedCardId == dependant.id,
                         onToggle = { viewModel.toggleExpand(dependant.id) },
-                        verificationDocs = state.verificationDocs,
+                        onUpload = { photo, doc -> viewModel.uploadDocuments(photo.toString(), doc.toString()) },
                         modifier = Modifier.padding(horizontal = 16.dp)
                     )
                 }
@@ -134,7 +144,7 @@ import com.powergrid.exemployee.ui.theme.dynamic
     selfStatus: String,
     isExpanded: Boolean,
     onToggle: () -> Unit,
-    verificationDocs: List<VerificationDoc>,
+    onUpload: (Uri, Uri) -> Unit
 ) {
     Card(
         modifier = Modifier
@@ -265,23 +275,59 @@ import com.powergrid.exemployee.ui.theme.dynamic
                     Spacer(Modifier.height(16.dp))
 
                     Text(
-                        text = "Document Status",
+                        text = "Document Status: $selfStatus",
                         style = MaterialTheme.typography.labelLarge,
                         fontWeight = FontWeight.SemiBold.dynamic(),
                         color = Color(0xFF5D4037),
                         modifier = Modifier.padding(bottom = 8.dp)
                     )
 
-                    if (verificationDocs.isEmpty()) {
-                        Text(
-                            text = "No documents available",
-                            style = MaterialTheme.typography.bodySmall,
-                            color = Color(0xFF333333).copy(alpha = 0.7f),
-                        )
-                    } else {
-                        verificationDocs.forEach { doc ->
-                            DocumentStatusRow(doc)
-                        }
+                    val context = LocalContext.current
+                    var photoUri by remember { mutableStateOf<Uri?>(null) }
+                    var docUri by remember { mutableStateOf<Uri?>(null) }
+                    
+                    val photoLauncher = rememberLauncherForActivityResult(ActivityResultContracts.GetContent()) { uri ->
+                        photoUri = uri
+                    }
+                    val docLauncher = rememberLauncherForActivityResult(ActivityResultContracts.GetContent()) { uri ->
+                        docUri = uri
+                    }
+
+                    Spacer(Modifier.height(16.dp))
+                    
+                    OutlinedButton(
+                        onClick = { photoLauncher.launch("image/jpeg") },
+                        modifier = Modifier.fillMaxWidth().height(48.dp),
+                        shape = RoundedCornerShape(12.dp)
+                    ) {
+                        Text(if (photoUri != null) "Photo Selected" else "Upload Passport Size Photo (JPEG)")
+                    }
+                    
+                    Spacer(Modifier.height(8.dp))
+                    
+                    OutlinedButton(
+                        onClick = { docLauncher.launch("application/pdf") },
+                        modifier = Modifier.fillMaxWidth().height(48.dp),
+                        shape = RoundedCornerShape(12.dp)
+                    ) {
+                        Text(if (docUri != null) "Document Selected" else "Upload Relevant Documents (PDF)")
+                    }
+
+                    Spacer(Modifier.height(16.dp))
+                    
+                    Button(
+                        onClick = { 
+                            if (photoUri == null || docUri == null) {
+                                Toast.makeText(context, "Please select both files", Toast.LENGTH_SHORT).show()
+                            } else {
+                                Toast.makeText(context, "Uploading documents...", Toast.LENGTH_SHORT).show()
+                                onUpload(photoUri!!, docUri!!)
+                            }
+                        },
+                        modifier = Modifier.fillMaxWidth().height(48.dp),
+                        shape = RoundedCornerShape(12.dp)
+                    ) {
+                        Text("Submit")
                     }
                 }
             }
@@ -295,7 +341,7 @@ import com.powergrid.exemployee.ui.theme.dynamic
     dependant: Dependant,
     isExpanded: Boolean,
     onToggle: () -> Unit,
-    verificationDocs: List<VerificationDoc>,
+    onUpload: (Uri, Uri) -> Unit,
     modifier: Modifier = Modifier
 ) {
     Card(
@@ -436,23 +482,59 @@ import com.powergrid.exemployee.ui.theme.dynamic
 
                     // Document status section
                     Text(
-                        text = "Document Status",
+                        text = "Document Status: ${dependant.status}",
                         style = MaterialTheme.typography.labelLarge,
                         fontWeight = FontWeight.SemiBold.dynamic(),
                         color = MaterialTheme.colorScheme.primary,
                         modifier = Modifier.padding(bottom = 8.dp)
                     )
 
-                    if (verificationDocs.isEmpty()) {
-                        Text(
-                            text = "No documents available",
-                            style = MaterialTheme.typography.bodySmall,
-                            color = MaterialTheme.colorScheme.onSurfaceVariant,
-                        )
-                    } else {
-                        verificationDocs.forEach { doc ->
-                            DocumentStatusRow(doc)
-                        }
+                    val context = LocalContext.current
+                    var photoUri by remember { mutableStateOf<Uri?>(null) }
+                    var docUri by remember { mutableStateOf<Uri?>(null) }
+                    
+                    val photoLauncher = rememberLauncherForActivityResult(ActivityResultContracts.GetContent()) { uri ->
+                        photoUri = uri
+                    }
+                    val docLauncher = rememberLauncherForActivityResult(ActivityResultContracts.GetContent()) { uri ->
+                        docUri = uri
+                    }
+
+                    Spacer(Modifier.height(16.dp))
+                    
+                    OutlinedButton(
+                        onClick = { photoLauncher.launch("image/jpeg") },
+                        modifier = Modifier.fillMaxWidth().height(48.dp),
+                        shape = RoundedCornerShape(12.dp)
+                    ) {
+                        Text(if (photoUri != null) "Photo Selected" else "Upload Passport Size Photo (JPEG)")
+                    }
+                    
+                    Spacer(Modifier.height(8.dp))
+                    
+                    OutlinedButton(
+                        onClick = { docLauncher.launch("application/pdf") },
+                        modifier = Modifier.fillMaxWidth().height(48.dp),
+                        shape = RoundedCornerShape(12.dp)
+                    ) {
+                        Text(if (docUri != null) "Document Selected" else "Upload Relevant Documents (PDF)")
+                    }
+
+                    Spacer(Modifier.height(16.dp))
+                    
+                    Button(
+                        onClick = { 
+                            if (photoUri == null || docUri == null) {
+                                Toast.makeText(context, "Please select both files", Toast.LENGTH_SHORT).show()
+                            } else {
+                                Toast.makeText(context, "Uploading documents...", Toast.LENGTH_SHORT).show()
+                                onUpload(photoUri!!, docUri!!)
+                            }
+                        },
+                        modifier = Modifier.fillMaxWidth().height(48.dp),
+                        shape = RoundedCornerShape(12.dp)
+                    ) {
+                        Text("Submit")
                     }
                 }
             }

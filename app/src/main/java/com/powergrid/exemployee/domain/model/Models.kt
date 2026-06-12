@@ -20,6 +20,7 @@ data class Employee(
     val postingRegion: String,
     val email:       String,
     val photo:       String?,
+    val livelinessStatus: Int = 0
 ) {
     val photoUrl: String? get() = photo
     @Suppress("unused")
@@ -54,7 +55,8 @@ data class FamilyMember(
     val age: Int,
     val dob: String,
     val photo: String?,
-    val relation: String
+    val relation: String,
+    val livelinessStatus: Int = 0
 )
 
 data class Dependant(val id: String, val name: String, val relation: String, val age: Int, val dob: String, val status: String, val photoUrl: String? = null)

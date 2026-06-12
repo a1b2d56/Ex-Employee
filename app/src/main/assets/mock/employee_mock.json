@@ -7,7 +7,8 @@
     "phone": "+91 98765 43210",
     "posting_region": "Northern Region - II",
     "email": "rajesh.kumar@powergrid.in",
-    "photo": "mock_images/employee_photo.png"
+    "photo": "mock_images/employee_photo.png",
+    "liveliness_status": 2
   },
   "family": [
     {
@@ -15,21 +16,32 @@
       "age": 58,
       "dob": "22-07-1967",
       "photo": "mock_images/family_sunita.png",
-      "relation": "Spouse"
+      "relation": "Spouse",
+      "liveliness_status": 2
     },
     {
       "name": "Amit Kumar",
       "age": 32,
       "dob": "10-11-1993",
       "photo": "mock_images/family_amit.png",
-      "relation": "Son"
+      "relation": "Son",
+      "liveliness_status": 1
     },
     {
       "name": "Priya Sharma",
       "age": 28,
       "dob": "05-04-1997",
       "photo": "mock_images/family_priya.png",
-      "relation": "Daughter"
+      "relation": "Daughter",
+      "liveliness_status": 0
+    },
+    {
+      "name": "Arun Kumar",
+      "age": 25,
+      "dob": "12-08-2000",
+      "photo": "",
+      "relation": "Son",
+      "liveliness_status": 0
     }
   ],
   "profile_documents": [

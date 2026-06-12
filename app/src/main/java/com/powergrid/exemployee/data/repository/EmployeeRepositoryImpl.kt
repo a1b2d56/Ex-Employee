@@ -46,7 +46,8 @@ class EmployeeRepositoryImpl @Inject constructor(
                 phone = d.phone,
                 postingRegion = d.postingRegion,
                 email = d.email,
-                photo = d.photo ?: d.photoUrl
+                photo = d.photo ?: d.photoUrl,
+                livelinessStatus = d.livelinessStatus
             )
         }
 
@@ -56,7 +57,8 @@ class EmployeeRepositoryImpl @Inject constructor(
                 age = d.age,
                 dob = d.dob,
                 photo = d.photo,
-                relation = d.relation
+                relation = d.relation,
+                livelinessStatus = d.livelinessStatus
             )
         }
 

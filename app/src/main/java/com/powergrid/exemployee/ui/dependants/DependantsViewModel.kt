@@ -67,4 +67,17 @@ class DependantsViewModel @Inject constructor(
             )
         }
     }
+
+    private val _uploadState = MutableStateFlow<UiState<Unit>>(UiState.Idle)
+    val uploadState: StateFlow<UiState<Unit>> = _uploadState.asStateFlow()
+
+    fun uploadDocuments(photoUriStr: String, docUriStr: String) = viewModelScope.launch {
+        _uploadState.value = UiState.Loading
+        kotlinx.coroutines.delay(1500) // Simulate network call
+        _uploadState.value = UiState.Success(Unit)
+    }
+
+    fun resetUploadState() {
+        _uploadState.value = UiState.Idle
+    }
 }

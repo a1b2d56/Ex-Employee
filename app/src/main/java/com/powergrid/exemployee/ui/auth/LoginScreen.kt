@@ -117,7 +117,7 @@ fun LoginScreen(
             AppLogoBadge()
             Spacer(modifier = Modifier.height(16.dp))
             Text(
-                text = "Ex-Employee Portal",
+                text = "Ex-Employee",
                 style = MaterialTheme.typography.headlineMedium
             )
             
@@ -152,7 +152,7 @@ fun LoginScreen(
                         }
                         Spacer(modifier = Modifier.width(12.dp))
                         Text(
-                            text = "Root detected. Running in secure restricted mode.",
+                            text = "Rooted device detected. Running in secure restricted mode.",
                             style = MaterialTheme.typography.bodyMedium,
                             fontWeight = FontWeight.Medium,
                             color = MaterialTheme.colorScheme.onErrorContainer,

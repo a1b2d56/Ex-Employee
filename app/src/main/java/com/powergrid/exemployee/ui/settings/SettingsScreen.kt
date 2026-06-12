@@ -80,14 +80,8 @@ fun SettingsScreen(
     val fontScaleLabels = listOf("S", "M", "L", "XL")
     val fontFamilies = listOf(
         "default" to "System Default",
-        "inter" to "Inter",
         "figtree" to "Figtree",
-        "outfit" to "Outfit",
-        "plus_jakarta_sans" to "Plus Jakarta Sans",
-        "source_sans_3" to "Source Sans 3",
-        "nunito_sans" to "Nunito Sans",
-        "work_sans" to "Work Sans",
-        "manrope" to "Manrope"
+        "outfit" to "Outfit"
     )
 
     LazyColumn(

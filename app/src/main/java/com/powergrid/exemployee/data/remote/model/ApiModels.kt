@@ -59,7 +59,8 @@ data class EmployeeResponse(
     @SerialName("designation") val designation: String,
     @SerialName("dob") val dob: String,
     @SerialName("photo_url") val photoUrl: String? = null,
-    @SerialName("photo") val photo: String? = null
+    @SerialName("photo") val photo: String? = null,
+    @SerialName("liveliness_status") val livelinessStatus: Int = 0
 )
 
 @Serializable
@@ -78,7 +79,8 @@ data class FamilyMemberResponse(
     @SerialName("age") val age: Int,
     @SerialName("dob") val dob: String,
     @SerialName("photo") val photo: String? = null,
-    @SerialName("relation") val relation: String
+    @SerialName("relation") val relation: String,
+    @SerialName("liveliness_status") val livelinessStatus: Int = 0
 )
 
 @Serializable

@@ -18,6 +18,7 @@ object ThemePrefs {
     private const val KEY_THEME = "app_theme"
 
     enum class AppTheme(val label: String) {
+        POWERGRID("PowerGrid"),
         LIGHT("Light"),
         DARK("Dark"),
         MIDNIGHT("Midnight"),
@@ -26,9 +27,7 @@ object ThemePrefs {
         ESPRESSO("Espresso"),
         MATCHA("Matcha"),
         NORD("Nord"),
-        ROSE("Rosé"),
-        POWERGRID("PowerGrid");
-
+        ROSE("Rosé");
     }
 
     fun setTheme(ctx: Context, theme: AppTheme) {
@@ -37,7 +36,7 @@ object ThemePrefs {
 
     fun getTheme(ctx: Context): AppTheme {
         val name = ctx.getSharedPreferences(PREFS, Context.MODE_PRIVATE).getString(KEY_THEME, null)
-        return name?.let { runCatching { AppTheme.valueOf(it) }.getOrNull() } ?: AppTheme.LIGHT
+        return name?.let { runCatching { AppTheme.valueOf(it) }.getOrNull() } ?: AppTheme.POWERGRID
     }
 
     /** Resolves the NightMode flag for AppCompatDelegate based on the current theme choice. */

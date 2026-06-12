@@ -23,6 +23,8 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.CheckCircle
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
+import androidx.compose.foundation.background
+import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.geometry.Offset
@@ -133,13 +135,17 @@ private fun LivelinessCardRow(
         shape = RoundedCornerShape(18.dp),
         elevation = CardDefaults.cardElevation(defaultElevation = 0.dp),
         colors = CardDefaults.cardColors(
-            containerColor = MaterialTheme.colorScheme.surfaceContainerLow
+            containerColor = if (card.relation.equals("Self", ignoreCase = true)) Color.Transparent else MaterialTheme.colorScheme.surfaceContainerLow
         )
     ) {
+        val isSelf = card.relation.equals("Self", ignoreCase = true)
+        val rowModifier = if (isSelf) {
+            Modifier.fillMaxWidth().background(Brush.linearGradient(listOf(Color(0xFFE6C176), Color(0xFFC7983C)))).padding(16.dp)
+        } else {
+            Modifier.fillMaxWidth().padding(16.dp)
+        }
         Row(
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(16.dp),
+            modifier = rowModifier,
             verticalAlignment = Alignment.CenterVertically
         ) {
             // Profile picture
@@ -163,7 +169,7 @@ private fun LivelinessCardRow(
                     Text(
                         text = card.name,
                         style = MaterialTheme.typography.titleMedium,
-                        color = MaterialTheme.colorScheme.onSurface,
+                        color = if (isSelf) Color.Black else MaterialTheme.colorScheme.onSurface,
                         modifier = Modifier.weight(1f),
                     )
                     
@@ -190,14 +196,14 @@ private fun LivelinessCardRow(
                     Text(
                         text = "DOB: ${card.dob}",
                         style = MaterialTheme.typography.bodySmall,
-                        color = MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.8f)
+                        color = if (isSelf) Color(0xFF333333).copy(alpha = 0.8f) else MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.8f)
                     )
                 }
                 if (card.age.isNotEmpty()) {
                     Text(
                         text = "Age: ${card.age}",
                         style = MaterialTheme.typography.bodySmall,
-                        color = MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.8f)
+                        color = if (isSelf) Color(0xFF333333).copy(alpha = 0.8f) else MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.8f)
                     )
                 }
                 

@@ -31,7 +31,7 @@ fun AboutScreen() {
         AppLogoBadge()
         Spacer(modifier = Modifier.height(16.dp))
         Text(
-            text = "Ex-Employee Portal",
+            text = "Ex-Employee",
             style = MaterialTheme.typography.headlineMedium,
             fontWeight = FontWeight.Bold.dynamic()
         )
@@ -57,7 +57,7 @@ fun AboutScreen() {
                     modifier = Modifier.padding(horizontal = 20.dp, vertical = 8.dp)
                 )
                 Text(
-                    text = "Ex-Employee portal for retired employees — view profile, notices, dependants, liveliness and document verification status.",
+                    text = "Registered Office (New Delhi):\nAddress: B-9, Qutab Institutional Area, Katwaria Sarai, New Delhi - 110016\nPhone: +91-11-26560112, 26560115\nCIN: L40101DL1989GOI038121\n\nCorporate Office (Gurugram):\nAddress: \"Saudamini\", Plot No. 2, Sector 29, Near IFFCO Chowk, Gurugram (Haryana) - 122001",
                     style = MaterialTheme.typography.bodyMedium,
                     modifier = Modifier.padding(horizontal = 20.dp, vertical = 8.dp)
                 )
